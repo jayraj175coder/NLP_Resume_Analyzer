@@ -56,9 +56,25 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Configure Multer for File Uploads (In-Memory storage)
+const MAX_UPLOAD_SIZE_BYTES = 5 * 1024 * 1024;
+const ALLOWED_FILE_EXTENSIONS = new Set([".pdf", ".docx", ".txt"]);
+const ALLOWED_MIME_TYPES = new Set([
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "text/plain"
+]);
+
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+  limits: { fileSize: MAX_UPLOAD_SIZE_BYTES },
+  fileFilter: (_request, file, callback) => {
+    const extension = path.extname(file.originalname).toLowerCase();
+    if (!ALLOWED_FILE_EXTENSIONS.has(extension) || !ALLOWED_MIME_TYPES.has(file.mimetype)) {
+      callback(new Error("Only PDF, DOCX, and TXT resumes are supported."));
+      return;
+    }
+    callback(null, true);
+  }
 });
 
 /**
@@ -264,6 +280,21 @@ app.get("/api/export/csv", (req, res) => {
   } catch (err: any) {
     return res.status(500).send("Error exporting history.");
   }
+});
+
+app.use((error: Error, _req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (res.headersSent) return next(error);
+
+  if (error instanceof multer.MulterError && error.code === "LIMIT_FILE_SIZE") {
+    return res.status(413).json({ error: "Resume uploads must be 5 MB or smaller." });
+  }
+
+  if (error instanceof multer.MulterError || error.message === "Only PDF, DOCX, and TXT resumes are supported.") {
+    return res.status(400).json({ error: error.message });
+  }
+
+  console.error("Unhandled request error:", error);
+  return res.status(500).json({ error: "Unexpected server error." });
 });
 
 // ==========================================
