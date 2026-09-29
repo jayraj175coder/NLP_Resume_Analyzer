@@ -456,7 +456,7 @@ export default function UploadSection({ onAnalyze, loading }: UploadSectionProps
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#00F5A0]/15">
           <div className="flex items-center space-x-2 text-xs font-mono text-emerald-400/80">
             <ShieldCheck className="w-4 h-4 text-[#00F5A0]" />
-            <span>ALGORITHMS: TF-IDF TOKENIZER • COSINE SIMILARITY • NER • GEMINI AI AUDIT</span>
+            <span>ALGORITHMS: TF-IDF TOKENIZER • COSINE SIMILARITY • NER • RULE-BASED ATS AUDIT</span>
           </div>
 
           <button

@@ -129,7 +129,7 @@ export default function Dashboard({ data }: DashboardProps) {
       {/* Print-Only Title Header */}
       <div className="hidden print:block border-b-2 border-slate-900 pb-4 mb-6">
         <h1 className="text-2xl font-bold text-slate-950">CYBER_ATS // RESUME INTELLIGENCE REPORT</h1>
-        <p className="text-xs font-mono text-slate-500">Evaluated via TF-IDF Vectorizer, Cosine Similarity & Gemini AI</p>
+        <p className="text-xs font-mono text-slate-500">Evaluated via TF-IDF Vectorizer, Cosine Similarity & Rule-Based NLP</p>
         <div className="grid grid-cols-2 gap-4 mt-4 text-xs font-sans text-slate-800">
           <div>
             <p><strong>Candidate:</strong> {candidateName}</p>
@@ -705,7 +705,7 @@ export default function Dashboard({ data }: DashboardProps) {
         <div className="space-y-6">
           <div className="glass-cyber rounded-2xl p-6 sm:p-8 space-y-6">
             <div className="space-y-1">
-              <h3 className="text-xl font-display font-bold text-white">Gemini AI Actionable Recommendations</h3>
+              <h3 className="text-xl font-display font-bold text-white">Actionable Recommendations</h3>
               <p className="text-xs text-slate-300 font-sans">Step-by-step roadmap to maximize recruitment callbacks.</p>
             </div>
 

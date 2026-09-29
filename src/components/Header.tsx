@@ -22,13 +22,13 @@ export default function Header({ activeView = "dashboard", onViewChange }: Heade
           </span>
           <span className="hidden md:inline text-emerald-300/60">::</span>
           <span className="hidden md:inline text-slate-300">
-            NEURAL AUDITOR: <span className="text-[#FFD54A]">GEMINI AI DEEP_INSPECT</span>
+            ANALYSIS ENGINE: <span className="text-[#FFD54A]">RULE-BASED NLP INSPECTION</span>
           </span>
         </div>
 
         <div className="flex items-center space-x-3 text-slate-400">
           <span className="hidden lg:inline bg-[#021E14] px-2 py-0.5 rounded border border-[#FFD54A]/20 text-[10px] text-[#FFD54A]">
-            CONVERSATIONAL AI COPILOT READY
+            NLP ANALYSIS READY
           </span>
           <span className="font-mono text-[10px] text-emerald-400/70">
             LOC: HACKER_CORP_MAIN

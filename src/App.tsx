@@ -40,7 +40,7 @@ export default function App() {
     "TF-IDF_VECTORIZER // BUILDING HIGH-DIMENSIONAL TERM MATRICES...",
     "COSINE_SIMILARITY // COMPUTING ANGULAR DISTANCE OVER RESUME VECTORS...",
     "NER_SCANNER // EXTRACTING TECH ROLES, COMPANIES & DATES...",
-    "GEMINI_PRO // EXECUTING NEURAL RECRUITER VERDICT & BULLET REWRITES..."
+    "INSIGHT_ENGINE // GENERATING ATS RECOMMENDATIONS & BULLET REWRITES..."
   ];
 
   // Fetch reports history from backend SQLite on load
@@ -223,7 +223,7 @@ export default function App() {
                 className="inline-flex items-center space-x-1.5 bg-[#FFD54A]/10 border border-[#FFD54A]/40 px-3.5 py-1 rounded-full text-xs font-mono text-[#FFD54A] hover:bg-[#FFD54A]/20 transition-all font-bold cursor-pointer"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>CONVERSATIONAL AI COPILOT ▸</span>
+                <span>NLP LEARNING LAB ▸</span>
               </button>
             </div>
 
@@ -232,7 +232,7 @@ export default function App() {
             </h2>
 
             <p className="text-sm sm:text-base text-emerald-100/70 font-sans max-w-2xl mx-auto leading-relaxed">
-              Autonomous vector NLP parser, TF-IDF matrix scorer, and Gemini neural auditor engineered to maximize hiring callbacks.
+              Autonomous vector NLP parser and TF-IDF matrix scorer engineered to provide clear ATS-focused feedback.
             </p>
           </div>
 
@@ -275,7 +275,7 @@ export default function App() {
                 &gt; {analyzingTip}
               </div>
               <p className="text-xs text-emerald-300/80 font-mono">
-                Extracting tokens • Computing cosine similarities • Querying neural auditor...
+                Extracting tokens • Computing cosine similarities • Generating recommendations...
               </p>
             </div>
           </div>
