@@ -45,6 +45,20 @@ import { getAllReports, saveReport, deleteReport, exportReportsCSV } from "./src
 const app = express();
 const parsedPort = Number.parseInt(process.env.PORT ?? "3000", 10);
 const PORT = Number.isInteger(parsedPort) && parsedPort > 0 ? parsedPort : 3000;
+const MAX_TEXT_LENGTH = 250_000;
+
+app.disable("x-powered-by");
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "camera=(), geolocation=(), microphone=()");
+
+  if (req.path.startsWith("/api/")) {
+    res.setHeader("Cache-Control", "no-store");
+  }
+  next();
+});
 
 // Health check route for cloud ingress/monitoring
 app.get("/api/health", (req, res) => {
@@ -109,11 +123,15 @@ async function extractTextFromBuffer(buffer: Buffer, mimeType: string, originalN
  */
 app.post("/api/analyze", upload.single("resumeFile"), async (req, res) => {
   try {
-    let resumeText = req.body.resumeText || "";
-    const jdText = req.body.jdText || "";
+    let resumeText = typeof req.body.resumeText === "string" ? req.body.resumeText : "";
+    const jdText = typeof req.body.jdText === "string" ? req.body.jdText : "";
 
-    if (!jdText) {
+    if (!jdText.trim()) {
       return res.status(400).json({ error: "Job description text is required." });
+    }
+
+    if (jdText.length > MAX_TEXT_LENGTH) {
+      return res.status(413).json({ error: "Job description text exceeds the 250,000 character limit." });
     }
 
     // If file is uploaded, extract text from it
@@ -127,6 +145,10 @@ app.post("/api/analyze", upload.single("resumeFile"), async (req, res) => {
 
     if (!resumeText.trim()) {
       return res.status(400).json({ error: "Resume text or file is required." });
+    }
+
+    if (resumeText.length > MAX_TEXT_LENGTH) {
+      return res.status(413).json({ error: "Resume text exceeds the 250,000 character limit." });
     }
 
     // 1. NLP Processing - Text Cleaning & Tokenization
