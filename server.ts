@@ -43,7 +43,8 @@ import { getGeminiAnalysis } from "./src/nlp/gemini-service.ts";
 import { getAllReports, saveReport, deleteReport, exportReportsCSV } from "./src/nlp/history-db.ts";
 
 const app = express();
-const PORT = 3000;
+const parsedPort = Number.parseInt(process.env.PORT ?? "3000", 10);
+const PORT = Number.isInteger(parsedPort) && parsedPort > 0 ? parsedPort : 3000;
 
 // Health check route for cloud ingress/monitoring
 app.get("/api/health", (req, res) => {
@@ -289,9 +290,30 @@ async function startServer() {
       console.log("Serving production static assets.");
     }
 
-    app.listen(PORT, "0.0.0.0", () => {
+    const server = app.listen(PORT, "0.0.0.0", () => {
       console.log(`AI Resume Analyzer backend is running on http://localhost:${PORT}`);
     });
+
+    server.on("error", (error) => {
+      console.error("Unable to start HTTP server:", error);
+      process.exit(1);
+    });
+
+    const shutdown = (signal: string) => {
+      console.log(`${signal} received. Closing HTTP server...`);
+      server.close((error) => {
+        if (error) {
+          console.error("HTTP server did not close cleanly:", error);
+          process.exit(1);
+        }
+        process.exit(0);
+      });
+
+      setTimeout(() => process.exit(1), 10_000).unref();
+    };
+
+    process.once("SIGTERM", () => shutdown("SIGTERM"));
+    process.once("SIGINT", () => shutdown("SIGINT"));
   } catch (err) {
     console.error("Fatal error starting server:", err);
   }
