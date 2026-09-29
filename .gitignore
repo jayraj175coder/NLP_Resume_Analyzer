@@ -1,0 +1,14 @@
+node_modules/
+build/
+dist/
+coverage/
+.data/
+data/
+resume_analyzer_db.json
+*.sqlite
+*.sqlite3
+*.db
+.DS_Store
+*.log
+.env*
+!.env.example

@@ -1,0 +1,6 @@
+{
+  "name": "CV_ATS",
+  "description": "AI Resume Intelligence and Educational Platform featuring Conversational AI assistant, TF-IDF scoring, and ATS optimization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
