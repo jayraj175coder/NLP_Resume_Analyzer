@@ -46,6 +46,7 @@ export async function getGeminiAnalysis(resumeText: string, jdText: string): Pro
   }
 
   try {
+    const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
     const prompt = `
 You are an expert Executive Recruiter, Resume Writer, and ATS Specialist.
 Analyze the following Resume and Job Description (JD). Offer detailed feedback, suggestions, and recommendations to optimize the resume.
@@ -73,7 +74,7 @@ Provide your analysis in the following strict JSON format:
 `;
 
     const response = await client.models.generateContent({
-      model: "gemini-3.5-flash",
+      model,
       contents: prompt,
       config: {
         responseMimeType: "application/json",
@@ -83,7 +84,20 @@ Provide your analysis in the following strict JSON format:
     const textOutput = response.text;
     if (!textOutput) throw new Error("Empty response from Gemini API");
 
-    return JSON.parse(textOutput.trim());
+    const analysis = JSON.parse(textOutput.trim()) as GeminiAnalysisResult;
+    if (
+      typeof analysis.summary !== "string" ||
+      !Array.isArray(analysis.strengths) ||
+      !Array.isArray(analysis.weaknesses) ||
+      !Array.isArray(analysis.recommendations) ||
+      !Array.isArray(analysis.suggestedBulletPoints) ||
+      !Array.isArray(analysis.missingKeywords) ||
+      typeof analysis.grammarNotes !== "string"
+    ) {
+      throw new Error("Gemini returned an invalid analysis response");
+    }
+
+    return analysis;
   } catch (error) {
     console.error("Gemini analysis failed, falling back to rule-based system:", error);
     return getFallbackAnalysis(resumeText, jdText);
