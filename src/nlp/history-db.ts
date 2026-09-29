@@ -17,15 +17,26 @@ export interface ReportItem {
   qualityReport: any; // clean NLP evaluation
 }
 
-const DB_PATH = path.join(process.cwd(), "resume_analyzer_db.json");
+const DATA_DIR = process.env.DATA_DIR
+  ? path.resolve(process.env.DATA_DIR)
+  : path.join(process.cwd(), ".data");
+const DB_PATH = path.join(DATA_DIR, "reports.json");
 
 /**
  * Initialize local database file if it doesn't exist
  */
 function initDb() {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
   if (!fs.existsSync(DB_PATH)) {
     fs.writeFileSync(DB_PATH, JSON.stringify([], null, 2), "utf8");
   }
+}
+
+function writeReports(reports: ReportItem[]): void {
+  initDb();
+  const temporaryPath = `${DB_PATH}.${process.pid}.tmp`;
+  fs.writeFileSync(temporaryPath, JSON.stringify(reports, null, 2), "utf8");
+  fs.renameSync(temporaryPath, DB_PATH);
 }
 
 /**
@@ -62,7 +73,7 @@ export function saveReport(report: Omit<ReportItem, "id" | "timestamp">): Report
   }
 
   try {
-    fs.writeFileSync(DB_PATH, JSON.stringify(reports, null, 2), "utf8");
+    writeReports(reports);
   } catch (err) {
     console.error("Error writing database file:", err);
   }
@@ -81,7 +92,7 @@ export function deleteReport(id: string): boolean {
   if (reports.length === filtered.length) return false;
 
   try {
-    fs.writeFileSync(DB_PATH, JSON.stringify(filtered, null, 2), "utf8");
+    writeReports(filtered);
     return true;
   } catch (err) {
     console.error("Error writing database file during delete:", err);
