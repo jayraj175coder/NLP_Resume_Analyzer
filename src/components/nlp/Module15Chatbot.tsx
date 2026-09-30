@@ -164,7 +164,7 @@ export default function Module15Chatbot({
     scrollToBottom();
   }, [messages, isGenerating]);
 
-  const handleSend = (textToSend?: string) => {
+  const handleSend = async (textToSend?: string) => {
     const query = textToSend || inputQuery;
     if (!query.trim() || isGenerating) return;
 
@@ -179,7 +179,49 @@ export default function Module15Chatbot({
     if (!textToSend) setInputQuery("");
     setIsGenerating(true);
 
-    // Simulate ChatGPT / Gemini generation streaming latency
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: query,
+          context: {
+            resumeText,
+            candidateName,
+            jobTitle,
+            skillsFound,
+            missingSkills,
+            atsScore
+          }
+        })
+      });
+
+      const data = await res.json();
+      if (data.success && data.text) {
+        const botResponse: ChatbotMessage = {
+          id: `bot-${Date.now()}`,
+          sender: "bot",
+          text: data.text,
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          intent: data.intent || "GEMINI_GENERATIVE_AI",
+          confidence: data.confidence || 0.99,
+          suggestions: [
+            "Summarize my uploaded resume",
+            "What are my strengths and weaknesses?",
+            "Which technical skills am I missing?",
+            "Simulate a technical interview question",
+            "How can I boost my ATS score?"
+          ]
+        };
+        setMessages((prev) => [...prev, botResponse]);
+        setIsGenerating(false);
+        return;
+      }
+    } catch (err) {
+      console.warn("Gemini Chat API call error, using local fallback:", err);
+    }
+
+    // Local NLP Rule-Engine Fallback
     setTimeout(() => {
       const botResponse = processChatbotQuery(
         query,
@@ -195,7 +237,7 @@ export default function Module15Chatbot({
       );
       setMessages((prev) => [...prev, botResponse]);
       setIsGenerating(false);
-    }, 450);
+    }, 350);
   };
 
   const handleCopy = (id: string, text: string) => {

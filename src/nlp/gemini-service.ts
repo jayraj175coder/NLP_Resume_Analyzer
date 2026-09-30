@@ -165,3 +165,59 @@ function getFallbackAnalysis(resumeText: string, jdText: string): GeminiAnalysis
     grammarNotes: "Tone is appropriately professional. Ensure consistency in verb tenses across current and past experiences."
   };
 }
+
+/**
+ * Uses Gemini AI for real-time generative conversational response grounded on candidate resume data.
+ */
+export async function getGeminiChatResponse(
+  userQuery: string,
+  context: {
+    resumeText?: string;
+    candidateName?: string;
+    jobTitle?: string;
+    skillsFound?: string[];
+    missingSkills?: string[];
+    atsScore?: number;
+  }
+): Promise<string | null> {
+  const client = getGeminiClient();
+  if (!client || !userQuery.trim()) return null;
+
+  try {
+    const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
+    const prompt = `
+You are an expert AI Career Coach, ATS Specialist, and Technical Interviewer (Resume Co-Pilot).
+You are grounded in the candidate's uploaded resume.
+
+CANDIDATE CONTEXT:
+- Candidate Name: ${context.candidateName || "Candidate"}
+- Target Position: ${context.jobTitle || "Software Engineer"}
+- ATS Benchmark Score: ${context.atsScore || 85}/100
+- Identified Skills (${(context.skillsFound || []).length}): ${(context.skillsFound || []).join(", ") || "TypeScript, React, Python, SQL"}
+- High-Priority Missing Skills: ${(context.missingSkills || []).join(", ") || "Docker, AWS, Kubernetes"}
+- Resume Context Snippet:
+"""
+${(context.resumeText || "").slice(0, 1500)}
+"""
+
+USER QUESTION:
+"${userQuery}"
+
+RESPONSE INSTRUCTIONS:
+- Provide an encouraging, expert, clear, and actionable response.
+- Use markdown formatting (**bold**, \`code\`, ### headings, • bullet points).
+- Offer practical advice to optimize ATS ranking or excel in technical interviews.
+`;
+
+    const response = await client.models.generateContent({
+      model,
+      contents: prompt,
+    });
+
+    return response.text || null;
+  } catch (err) {
+    console.error("Gemini chat response failed, falling back to NLP engine:", err);
+    return null;
+  }
+}
+

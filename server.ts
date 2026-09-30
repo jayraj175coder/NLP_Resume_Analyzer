@@ -39,7 +39,7 @@ import {
   detectDuplicateKeywords,
   evaluateQuality
 } from "./src/nlp/nlp-engine.ts";
-import { getGeminiAnalysis } from "./src/nlp/gemini-service.ts";
+import { getGeminiAnalysis, getGeminiChatResponse } from "./src/nlp/gemini-service.ts";
 import { getAllReports, saveReport, deleteReport, exportReportsCSV } from "./src/nlp/history-db.ts";
 
 const app = express();
@@ -267,6 +267,39 @@ app.post("/api/analyze", upload.single("resumeFile"), async (req, res) => {
     console.error("Analysis route error:", error);
     return res.status(500).json({ error: error.message || "Internal server error occurred." });
   }
+});
+
+/**
+ * Conversational AI Route (Gemini Generative AI + Intelligent NLP Engine Fallback)
+ */
+app.post("/api/chat", async (req, res) => {
+  try {
+    const { message, context } = req.body;
+    if (!message || typeof message !== "string" || !message.trim()) {
+      return res.status(400).json({ error: "Message query is required." });
+    }
+
+    // Attempt Gemini Generative AI Response
+    const geminiText = await getGeminiChatResponse(message, context || {});
+    if (geminiText) {
+      return res.json({
+        success: true,
+        source: "gemini_ai",
+        text: geminiText,
+        intent: "GENERATIVE_AI_COPILOT",
+        confidence: 0.99
+      });
+    }
+  } catch (err) {
+    console.error("Gemini chat route error, falling back to NLP engine:", err);
+  }
+
+  // Graceful Fallback to Rule-Based NLP Engine
+  return res.json({
+    success: true,
+    source: "rule_engine",
+    text: null
+  });
 });
 
 /**
