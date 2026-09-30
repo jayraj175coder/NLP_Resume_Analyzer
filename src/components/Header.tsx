@@ -14,7 +14,7 @@ export default function Header({ activeView = "dashboard", onViewChange }: Heade
           type="button"
           onClick={() => onViewChange?.("dashboard")}
           className="group flex min-w-0 items-center gap-3.5 text-left cursor-pointer"
-          aria-label="Go to Scholar Resume AI dashboard"
+          aria-label="Go to Resume Analyzer dashboard"
         >
           <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-amber-500/40 bg-gradient-to-br from-amber-500 via-amber-600 to-teal-700 text-slate-950 shadow-md shadow-amber-500/20 transition-transform duration-200 group-hover:-translate-y-0.5">
             <GraduationCap className="h-6 w-6 text-slate-950 stroke-[2.2]" />
@@ -22,7 +22,7 @@ export default function Header({ activeView = "dashboard", onViewChange }: Heade
           <span className="min-w-0">
             <span className="flex items-center gap-2">
               <span className="truncate text-xl sm:text-2xl font-serif font-bold tracking-tight text-white group-hover:text-amber-300 transition-colors">
-                Scholar Resume AI
+                Resume Analyzer
               </span>
               <span className="hidden rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-mono font-semibold uppercase tracking-wider text-amber-300 sm:inline">
                 Academic NLP Lab
