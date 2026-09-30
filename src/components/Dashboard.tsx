@@ -32,6 +32,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { AnalysisResponse } from "../types";
 import NGramHeatmap from "./NGramHeatmap";
 import AcademicCertificateModal from "./AcademicCertificateModal";
+import NLPAnalyticsCharts from "./NLPAnalyticsCharts";
 
 interface DashboardProps {
   data: AnalysisResponse;
@@ -355,6 +356,9 @@ export default function Dashboard({ data }: DashboardProps) {
             </div>
 
           </div>
+
+          {/* Interactive NLP Analytics & Visual Charts */}
+          <NLPAnalyticsCharts data={data} />
 
           {/* Interactive N-Gram Heatmap Matrix Component */}
           <NGramHeatmap
