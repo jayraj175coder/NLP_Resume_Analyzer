@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, GraduationCap, LayoutDashboard, ShieldCheck, Award, Sparkles } from "lucide-react";
+import { Bot, GraduationCap, LayoutDashboard, ShieldCheck, Award, Sparkles } from "lucide-react";
 
 interface HeaderProps {
   activeView?: "dashboard" | "nlp_labs";
@@ -25,7 +25,7 @@ export default function Header({ activeView = "dashboard", onViewChange }: Heade
                 Resume Analyzer
               </span>
               <span className="hidden rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-mono font-semibold uppercase tracking-wider text-amber-300 sm:inline">
-                Academic NLP Lab
+                Conversational AI
               </span>
             </span>
             <span className="hidden text-xs text-slate-300 sm:block">
@@ -63,8 +63,8 @@ export default function Header({ activeView = "dashboard", onViewChange }: Heade
                     : "text-slate-300 hover:bg-white/10 hover:text-white"
                 }`}
               >
-                <BookOpen className="h-4 w-4" />
-                <span>NLP Lab Modules</span>
+                <Bot className="h-4 w-4" />
+                <span>Conversational AI</span>
               </button>
             </nav>
           )}

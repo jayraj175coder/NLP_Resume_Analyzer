@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   Sparkles,
   BookOpen,
+  Bot,
   AlertOctagon,
   GraduationCap,
   Award,
@@ -217,8 +218,8 @@ export default function App() {
                 onClick={() => setActiveView("nlp_labs")}
                 className="inline-flex items-center space-x-1.5 bg-teal-500/10 border border-teal-500/40 px-4 py-1.5 rounded-full text-xs font-mono text-teal-300 hover:bg-teal-500/20 transition-all font-bold cursor-pointer"
               >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Explore Interactive NLP Lab</span>
+                <Bot className="w-3.5 h-3.5 text-teal-300" />
+                <span>Launch Conversational AI Co-Pilot</span>
               </button>
             </div>
 

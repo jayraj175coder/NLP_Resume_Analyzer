@@ -43,7 +43,7 @@ export default function NLPPlatform({ resumeData, onReturnToDashboard }: Props) 
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
               <span className="text-xs font-mono font-bold text-amber-300 tracking-wider uppercase">
-                Academic NLP Lab • Conversational AI Engine
+                Conversational AI Engine • Interview Co-Pilot
               </span>
             </div>
             <h1 className="text-xl md:text-2xl font-serif font-bold tracking-tight text-white mt-1 flex items-center gap-2.5">
