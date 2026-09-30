@@ -21,16 +21,16 @@
   --color-academic-indigo: #6366F1;
 }
 
-/* Base Body Styling with Scholar Midnight Canvas */
+/* Base Body Styling with Cosmic Scholar Midnight Canvas */
 body {
-  background-color: #0B132B !important;
+  background-color: #070D1E !important;
   color: #F8FAFC !important;
   min-height: 100vh;
   font-family: var(--font-sans);
   background-image: 
-    radial-gradient(circle at 50% 0%, rgba(13, 148, 136, 0.12) 0%, transparent 60%),
-    radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 0% 100%, rgba(11, 19, 43, 0.95) 0%, transparent 70%);
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.10) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(7, 13, 30, 0.98) 0%, transparent 70%);
   background-attachment: fixed !important;
 }
 
@@ -38,15 +38,15 @@ body {
 .academic-grid {
   background-size: 44px 44px;
   background-image: 
-    linear-gradient(to right, rgba(245, 158, 11, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(245, 158, 11, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(245, 158, 11, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 158, 11, 0.035) 1px, transparent 1px);
 }
 
 .academic-grid-dense {
   background-size: 22px 22px;
   background-image: 
-    linear-gradient(to right, rgba(13, 148, 136, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(13, 148, 136, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(13, 148, 136, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(13, 148, 136, 0.035) 1px, transparent 1px);
 }
 
 /* Academic Paper Glassmorphism & Cards */
@@ -159,6 +159,22 @@ body {
 
 .animate-pulse-glow {
   animation: academicPulse 3.5s ease-in-out infinite;
+}
+
+@keyframes cosmicNebulaFloat {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(45px, -30px) scale(1.12);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-cosmic-nebula {
+  animation: cosmicNebulaFloat 24s ease-in-out infinite;
 }
 
 /* Print Overrides */
