@@ -14,7 +14,9 @@ import {
   Cpu,
   Layers,
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  GraduationCap,
+  BookOpen
 } from "lucide-react";
 
 interface UploadSectionProps {
@@ -196,14 +198,6 @@ export default function UploadSection({ onAnalyze, loading }: UploadSectionProps
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // Auto load demo content for instant inspection
-  const loadDemo = () => {
-    setUploadMode("text");
-    setResumeText(SAMPLE_RESUME);
-    setJdText(SAMPLE_JDS[0].text);
-    setActiveJdIndex(0);
-  };
-
   const handleSelectJdPreset = (index: number) => {
     setJdText(SAMPLE_JDS[index].text);
     setActiveJdIndex(index);
@@ -232,33 +226,33 @@ export default function UploadSection({ onAnalyze, loading }: UploadSectionProps
   };
 
   return (
-    <div className="glass-cyber rounded-2xl p-6 sm:p-8 relative overflow-hidden transition-all duration-300">
-      {/* Cyber HUD Corner brackets */}
+    <div className="glass-academic rounded-2xl p-6 sm:p-8 relative overflow-hidden transition-all duration-300">
+      {/* Card accents */}
       <div className="hud-corner-tl" />
       <div className="hud-corner-tr" />
       <div className="hud-corner-bl" />
       <div className="hud-corner-br" />
 
       {/* Decorative ambient background glows */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-[#FFD54A]/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#00F5A0]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Top Header section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-5 border-b border-[#00F5A0]/15">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-5 border-b border-amber-500/20">
         <div className="space-y-1">
           <div className="flex items-center space-x-2">
-            <span className="text-[10px] font-mono font-bold tracking-widest text-[#FFD54A] uppercase bg-[#FFD54A]/10 border border-[#FFD54A]/30 px-2 py-0.5 rounded">
-              STEP 01 // INPUT EXTRACTION
+            <span className="text-[10px] font-mono font-bold tracking-widest text-amber-300 uppercase bg-amber-500/15 border border-amber-500/30 px-2.5 py-0.5 rounded">
+              Phase 1 • Input Documents
             </span>
-            <span className="text-xs font-mono text-emerald-400/60 hidden sm:inline">
-              [VECTOR_STREAM]
+            <span className="text-xs font-mono text-teal-300/80 hidden sm:inline">
+              PDF, DOCX & Text Ready
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-display font-bold text-white tracking-tight">
-            Upload Candidate Dossier & Target JD
+          <h2 className="text-xl sm:text-2xl font-serif font-bold text-white tracking-tight">
+            Document Evaluation Workspace
           </h2>
           <p className="text-xs text-slate-300 font-sans">
-            Feed your resume document or paste raw text alongside target role requirements for deep algorithmic vector comparison.
+            Upload candidate resume and target role specification for high-precision vector distance scoring.
           </p>
         </div>
       </div>
@@ -271,41 +265,41 @@ export default function UploadSection({ onAnalyze, loading }: UploadSectionProps
           <div className="space-y-3.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <FileCode className="w-4 h-4 text-[#FFD54A]" />
-                <label className="text-sm font-display font-bold text-white tracking-wide">
-                  Candidate Resume <span className="text-[#FFD54A] font-mono">*</span>
+                <FileCode className="w-4 h-4 text-amber-400" />
+                <label className="text-sm font-serif font-bold text-white tracking-wide">
+                  Candidate Resume <span className="text-amber-400 font-mono">*</span>
                 </label>
               </div>
 
               {/* Mode Toggle Pills */}
-              <div className="flex bg-[#01140D] p-1 rounded-lg border border-[#00F5A0]/20">
+              <div className="flex bg-slate-900/90 p-1 rounded-lg border border-amber-500/20">
                 <button
                   type="button"
                   onClick={() => setUploadMode("file")}
-                  className={`text-[11px] font-mono px-3 py-1 rounded-md transition-all ${
+                  className={`text-[11px] font-mono px-3 py-1 rounded-md transition-all cursor-pointer ${
                     uploadMode === "file"
-                      ? "bg-[#FFD54A] text-[#021E14] font-bold shadow-md"
-                      : "text-slate-400 hover:text-emerald-300"
+                      ? "bg-amber-500 text-slate-950 font-bold shadow-sm"
+                      : "text-slate-300 hover:text-amber-300"
                   }`}
                 >
-                  FILE DROP
+                  Upload file
                 </button>
                 <button
                   type="button"
                   onClick={() => setUploadMode("text")}
-                  className={`text-[11px] font-mono px-3 py-1 rounded-md transition-all ${
+                  className={`text-[11px] font-mono px-3 py-1 rounded-md transition-all cursor-pointer ${
                     uploadMode === "text"
-                      ? "bg-[#FFD54A] text-[#021E14] font-bold shadow-md"
-                      : "text-slate-400 hover:text-emerald-300"
+                      ? "bg-amber-500 text-slate-950 font-bold shadow-sm"
+                      : "text-slate-300 hover:text-amber-300"
                   }`}
                 >
-                  RAW STREAM
+                  Paste text
                 </button>
               </div>
             </div>
 
             {uploadMode === "file" ? (
-              /* Futuristic Drag-and-Drop Zone */
+              /* File drop zone */
               <div
                 onDragEnter={handleDrag}
                 onDragOver={handleDrag}
@@ -314,13 +308,10 @@ export default function UploadSection({ onAnalyze, loading }: UploadSectionProps
                 onClick={selectFileTrigger}
                 className={`relative rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 min-h-[250px] overflow-hidden ${
                   dragActive
-                    ? "border-2 border-[#FFD54A] bg-[#FFD54A]/10 shadow-[0_0_30px_rgba(255,213,74,0.25)]"
-                    : "border-2 border-dashed border-[#00F5A0]/30 hover:border-[#FFD54A]/60 bg-[#011810]/60 hover:bg-[#022418]/60"
+                    ? "border-2 border-amber-400 bg-amber-500/10 shadow-[0_0_30px_rgba(245,158,11,0.25)]"
+                    : "border-2 border-dashed border-amber-500/30 hover:border-amber-400/60 bg-slate-900/60 hover:bg-slate-800/60"
                 }`}
               >
-                {/* Cyber Scan beam animation */}
-                <div className="absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#00F5A0] to-transparent animate-scan-beam pointer-events-none" />
-
                 <input
                   type="file"
                   ref={fileInputRef}
@@ -331,39 +322,39 @@ export default function UploadSection({ onAnalyze, loading }: UploadSectionProps
 
                 {!selectedFile ? (
                   <div className="text-center space-y-3 z-10">
-                    <div className="mx-auto bg-[#021E14] p-4 rounded-2xl border border-[#00F5A0]/40 text-[#FFD54A] w-14 h-14 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                      <Upload className="w-6 h-6 animate-bounce" />
+                    <div className="mx-auto bg-slate-950 p-4 rounded-2xl border border-amber-500/40 text-amber-400 w-14 h-14 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <Upload className="w-6 h-6 text-amber-400" />
                     </div>
                     <div className="space-y-1">
-                      <p className="text-sm text-slate-100 font-display font-semibold">
-                        Drag & Drop PDF, DOCX, or TXT
+                      <p className="text-sm text-slate-100 font-serif font-semibold">
+                        Drag & drop PDF, DOCX, or TXT document
                       </p>
-                      <p className="text-xs text-emerald-400/80 font-mono">
-                        [MAX 10MB • NATIVE PARSER SUPPORTED]
+                      <p className="text-xs text-amber-300/80 font-mono">
+                        Up to 5 MB • PDF, DOCX, and TXT supported
                       </p>
                     </div>
                     <div className="pt-2">
-                      <span className="inline-block text-xs font-mono font-bold bg-[#FFD54A]/15 text-[#FFD54A] px-3 py-1 rounded-md border border-[#FFD54A]/30">
-                        BROWSE LOCAL STORAGE
+                      <span className="inline-block text-xs font-mono font-bold bg-amber-500/15 text-amber-300 px-3 py-1 rounded-md border border-amber-500/30">
+                        Choose Document File
                       </span>
                     </div>
                   </div>
                 ) : (
                   <div className="text-center space-y-4 w-full px-4 z-10">
-                    <div className="mx-auto bg-[#021E14] border-2 border-[#00F5A0] p-3.5 rounded-2xl text-[#00F5A0] w-14 h-14 flex items-center justify-center shadow-[0_0_20px_rgba(0,245,160,0.3)]">
-                      <CheckCircle2 className="w-7 h-7 text-[#00F5A0]" />
+                    <div className="mx-auto bg-slate-950 border-2 border-teal-400 p-3.5 rounded-2xl text-teal-400 w-14 h-14 flex items-center justify-center shadow-[0_0_20px_rgba(13,148,136,0.3)]">
+                      <CheckCircle2 className="w-7 h-7 text-teal-400" />
                     </div>
                     <div className="space-y-1">
                       <div className="flex items-center justify-center space-x-1.5">
-                        <span className="text-[10px] font-mono font-bold bg-[#00F5A0]/20 text-[#00F5A0] px-2 py-0.5 rounded border border-[#00F5A0]/40">
-                          FILE READY
+                        <span className="text-[10px] font-mono font-bold bg-teal-500/20 text-teal-300 px-2.5 py-0.5 rounded border border-teal-500/40">
+                          Document Staged
                         </span>
                       </div>
                       <p className="text-sm text-white font-mono font-bold truncate max-w-xs mx-auto">
                         {selectedFile.name}
                       </p>
-                      <p className="text-xs text-emerald-400/80 font-mono">
-                        SIZE: {(selectedFile.size / 1024).toFixed(1)} KB • TYPE: {selectedFile.name.split(".").pop()?.toUpperCase()}
+                      <p className="text-xs text-slate-300 font-mono">
+                        {(selectedFile.size / 1024).toFixed(1)} KB • {selectedFile.name.split(".").pop()?.toUpperCase()} file
                       </p>
                     </div>
                     <div className="flex justify-center space-x-3 pt-1">
@@ -373,10 +364,10 @@ export default function UploadSection({ onAnalyze, loading }: UploadSectionProps
                           e.stopPropagation();
                           removeFile();
                         }}
-                        className="text-xs font-mono font-bold bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 border border-rose-800/60 px-3.5 py-1.5 rounded-lg flex items-center space-x-1.5 transition-all shadow"
+                        className="text-xs font-mono font-bold bg-rose-950/50 hover:bg-rose-900/70 text-rose-300 border border-rose-800/60 px-3.5 py-1.5 rounded-lg flex items-center space-x-1.5 transition-all shadow cursor-pointer"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
-                        <span>DISCARD</span>
+                        <span>Remove Document</span>
                       </button>
                     </div>
                   </div>
@@ -388,12 +379,12 @@ export default function UploadSection({ onAnalyze, loading }: UploadSectionProps
                 <textarea
                   value={resumeText}
                   onChange={(e) => setResumeText(e.target.value)}
-                  placeholder="Paste complete raw text of resume here (experience, skills, education, projects)..."
-                  className="w-full h-[250px] bg-[#01140D]/90 border border-[#00F5A0]/30 rounded-xl p-4 text-xs font-mono text-emerald-200 placeholder-emerald-800/60 focus:outline-none focus:border-[#FFD54A] focus:ring-1 focus:ring-[#FFD54A] resize-none transition-all scrollbar-cyber"
+                  placeholder="Paste candidate resume content here, including work experience, technical stack, publications, and education..."
+                  className="w-full h-[250px] bg-slate-900/90 border border-amber-500/30 rounded-xl p-4 text-xs font-mono text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 resize-none transition-all scrollbar-academic"
                 />
-                <div className="absolute bottom-3 right-3 flex items-center space-x-2 text-[10px] font-mono text-[#FFD54A] bg-[#021E14] px-2.5 py-1 rounded border border-[#FFD54A]/30">
-                  <ClipboardSignature className="w-3 h-3 text-[#FFD54A]" />
-                  <span>{resumeText.split(/\s+/).filter(Boolean).length} WORDS // PARSED</span>
+                <div className="absolute bottom-3 right-3 flex items-center space-x-2 text-[10px] font-mono text-amber-300 bg-slate-950 px-2.5 py-1 rounded border border-amber-500/30">
+                  <ClipboardSignature className="w-3 h-3 text-amber-400" />
+                  <span>{resumeText.split(/\s+/).filter(Boolean).length} words</span>
                 </div>
               </div>
             )}
@@ -403,15 +394,15 @@ export default function UploadSection({ onAnalyze, loading }: UploadSectionProps
           <div className="space-y-3.5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="flex items-center space-x-2">
-                <Terminal className="w-4 h-4 text-[#00F5A0]" />
-                <label className="text-sm font-display font-bold text-white tracking-wide">
-                  Target Job Description (JD) <span className="text-[#FFD54A] font-mono">*</span>
+                <Terminal className="w-4 h-4 text-teal-400" />
+                <label className="text-sm font-serif font-bold text-white tracking-wide">
+                  Target Role Specification <span className="text-amber-400 font-mono">*</span>
                 </label>
               </div>
 
               {/* Quick Preset Selector */}
-              <span className="text-[10px] font-mono text-emerald-400/80">
-                PRESETS:
+              <span className="text-[10px] font-mono text-slate-300">
+                Sample role presets
               </span>
             </div>
 
@@ -422,10 +413,10 @@ export default function UploadSection({ onAnalyze, loading }: UploadSectionProps
                   key={i}
                   type="button"
                   onClick={() => handleSelectJdPreset(i)}
-                  className={`text-[10px] font-mono px-2.5 py-1 rounded-md border transition-all ${
+                  className={`text-[10px] font-mono px-2.5 py-1 rounded-md border transition-all cursor-pointer ${
                     activeJdIndex === i
-                      ? "bg-[#FFD54A] text-[#021E14] font-bold border-[#FFD54A] shadow-[0_0_10px_rgba(255,213,74,0.3)]"
-                      : "bg-[#01140D] text-slate-300 hover:text-[#FFD54A] border-[#00F5A0]/20 hover:border-[#FFD54A]/40"
+                      ? "bg-amber-500 text-slate-950 font-bold border-amber-400 shadow-sm"
+                      : "bg-slate-900 text-slate-300 hover:text-amber-300 border-amber-500/20 hover:border-amber-400/40"
                   }`}
                 >
                   {jd.title}
@@ -440,43 +431,40 @@ export default function UploadSection({ onAnalyze, loading }: UploadSectionProps
                   setJdText(e.target.value);
                   setActiveJdIndex(null);
                 }}
-                placeholder="Paste the target job description requirements, responsibilities, and required tech stack..."
-                className="w-full h-[210px] bg-[#01140D]/90 border border-[#00F5A0]/30 rounded-xl p-4 text-xs font-mono text-emerald-200 placeholder-emerald-800/60 focus:outline-none focus:border-[#FFD54A] focus:ring-1 focus:ring-[#FFD54A] resize-none transition-all scrollbar-cyber"
+                placeholder="Paste job description requirements, responsibilities, technical requirements, and qualifications..."
+                className="w-full h-[210px] bg-slate-900/90 border border-amber-500/30 rounded-xl p-4 text-xs font-mono text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 resize-none transition-all scrollbar-academic"
               />
-              <div className="absolute bottom-3 right-3 flex items-center space-x-2 text-[10px] font-mono text-[#00F5A0] bg-[#021E14] px-2.5 py-1 rounded border border-[#00F5A0]/30">
-                <FileText className="w-3 h-3 text-[#00F5A0]" />
-                <span>{jdText.split(/\s+/).filter(Boolean).length} WORDS // LOADED</span>
+              <div className="absolute bottom-3 right-3 flex items-center space-x-2 text-[10px] font-mono text-teal-300 bg-slate-950 px-2.5 py-1 rounded border border-teal-500/30">
+                <FileText className="w-3 h-3 text-teal-400" />
+                <span>{jdText.split(/\s+/).filter(Boolean).length} words</span>
               </div>
             </div>
           </div>
 
         </div>
 
-        {/* Massive Submit Button */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#00F5A0]/15">
-          <div className="flex items-center space-x-2 text-xs font-mono text-emerald-400/80">
-            <ShieldCheck className="w-4 h-4 text-[#00F5A0]" />
-            <span>ALGORITHMS: TF-IDF TOKENIZER • COSINE SIMILARITY • NER • RULE-BASED ATS AUDIT</span>
+        {/* Submit Button */}
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-amber-500/20">
+          <div className="flex items-center space-x-2 text-xs font-mono text-slate-300">
+            <ShieldCheck className="w-4 h-4 text-amber-400" />
+            <span>TF-IDF vector distance • Cosine similarity • NER entity extraction</span>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full sm:w-auto relative group overflow-hidden bg-[#FFD54A] hover:bg-[#ffe073] active:bg-[#e6be3b] text-[#021E14] font-display font-extrabold text-sm sm:text-base px-8 py-4 rounded-xl shadow-[0_0_25px_rgba(255,213,74,0.3)] hover:shadow-[0_0_35px_rgba(255,213,74,0.5)] active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none"
+            className="w-full sm:w-auto relative group overflow-hidden bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-serif font-bold text-sm sm:text-base px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
           >
-            {/* Shimmer line */}
-            <div className="absolute inset-0 bg-white/30 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-            
             <div className="flex items-center justify-center space-x-2.5 relative z-10">
               {loading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-[#021E14] border-t-transparent rounded-full animate-spin" />
-                  <span className="font-mono tracking-wider">RUNNING DEEP NLP AUDIT...</span>
+                  <div className="w-5 h-5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                  <span>Evaluating document...</span>
                 </>
               ) : (
                 <>
-                  <Zap className="w-5 h-5 fill-[#021E14]" />
-                  <span className="tracking-wide">EXECUTE DEEP ATS MATRIX SCAN</span>
+                  <GraduationCap className="w-5 h-5 stroke-[2.2]" />
+                  <span className="tracking-wide">Run Academic Evaluation</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}

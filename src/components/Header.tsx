@@ -1,5 +1,5 @@
 import React from "react";
-import { Terminal, Shield, Sparkles, Cpu, Activity, Zap, Binary, Layers } from "lucide-react";
+import { BookOpen, GraduationCap, LayoutDashboard, ShieldCheck, Award, Sparkles } from "lucide-react";
 
 interface HeaderProps {
   activeView?: "dashboard" | "nlp_labs";
@@ -8,89 +8,65 @@ interface HeaderProps {
 
 export default function Header({ activeView = "dashboard", onViewChange }: HeaderProps) {
   return (
-    <header className="w-full bg-[#01140D]/80 backdrop-blur-xl border-b border-[#00F5A0]/20 sticky top-0 z-50 transition-all print:hidden">
-      {/* Top micro-ticker bar */}
-      <div className="bg-[#021810] border-b border-[#00F5A0]/10 px-4 py-1 flex items-center justify-between text-[11px] font-mono text-emerald-400/80 overflow-hidden">
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-1.5 text-[#FFD54A]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#FFD54A] animate-ping" />
-            <span className="font-bold tracking-wider">[SYS_ACTIVE]</span>
-          </div>
-          <span className="hidden sm:inline text-emerald-300/60">::</span>
-          <span className="hidden sm:inline text-slate-300">
-            ENGINE: <span className="text-[#00F5A0]">TF-IDF + COSINE + CONVERSATIONAL AI</span>
-          </span>
-          <span className="hidden md:inline text-emerald-300/60">::</span>
-          <span className="hidden md:inline text-slate-300">
-            ANALYSIS ENGINE: <span className="text-[#FFD54A]">RULE-BASED NLP INSPECTION</span>
-          </span>
-        </div>
-
-        <div className="flex items-center space-x-3 text-slate-400">
-          <span className="hidden lg:inline bg-[#021E14] px-2 py-0.5 rounded border border-[#FFD54A]/20 text-[10px] text-[#FFD54A]">
-            NLP ANALYSIS READY
-          </span>
-          <span className="font-mono text-[10px] text-emerald-400/70">
-            LOC: HACKER_CORP_MAIN
-          </span>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
-        {/* Logo and Brand */}
-        <div
+    <header className="w-full sticky top-0 z-50 border-b border-amber-500/20 bg-[#0B132B]/90 backdrop-blur-xl print:hidden shadow-lg shadow-black/20">
+      <div className="max-w-7xl mx-auto flex h-20 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <button
+          type="button"
           onClick={() => onViewChange?.("dashboard")}
-          className="flex items-center space-x-3.5 cursor-pointer"
+          className="group flex min-w-0 items-center gap-3.5 text-left cursor-pointer"
+          aria-label="Go to Scholar Resume AI dashboard"
         >
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#FFD54A] to-[#00F5A0] rounded-xl blur opacity-40 group-hover:opacity-80 transition duration-500 animate-pulse-glow" />
-            <div className="relative bg-[#021E14] p-2.5 rounded-xl border border-[#FFD54A]/40 text-[#FFD54A] shadow-lg flex items-center justify-center">
-              <Terminal className="w-6 h-6 text-[#FFD54A]" />
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center space-x-2">
-              <h1 className="text-xl sm:text-2xl font-display font-extrabold tracking-tight text-white flex items-center gap-1.5">
-                <span>CV</span>
-                <span className="text-[#FFD54A] glow-yellow">_ATS</span>
-              </h1>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-[#FFD54A]/10 text-[#FFD54A] border border-[#FFD54A]/30 px-2 py-0.5 rounded">
-                v3.0 HACKER + NLP
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-amber-500/40 bg-gradient-to-br from-amber-500 via-amber-600 to-teal-700 text-slate-950 shadow-md shadow-amber-500/20 transition-transform duration-200 group-hover:-translate-y-0.5">
+            <GraduationCap className="h-6 w-6 text-slate-950 stroke-[2.2]" />
+          </span>
+          <span className="min-w-0">
+            <span className="flex items-center gap-2">
+              <span className="truncate text-xl sm:text-2xl font-serif font-bold tracking-tight text-white group-hover:text-amber-300 transition-colors">
+                Scholar Resume AI
               </span>
-            </div>
-            <p className="text-xs text-emerald-400/80 font-mono flex items-center space-x-1 mt-0.5">
-              <span>// AUTONOMOUS RESUME INTELLIGENCE MATRIX</span>
-            </p>
-          </div>
-        </div>
+              <span className="hidden rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-mono font-semibold uppercase tracking-wider text-amber-300 sm:inline">
+                Academic NLP Lab
+              </span>
+            </span>
+            <span className="hidden text-xs text-slate-300 sm:block">
+              Peer-reviewed resume matching & ATS optimization
+            </span>
+          </span>
+        </button>
 
-        {/* Center/Right Navigation Switcher */}
-        <div className="flex items-center space-x-2 sm:space-x-3">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="hidden items-center gap-2 text-xs text-slate-300 bg-slate-800/50 border border-slate-700/60 px-3 py-1.5 rounded-lg lg:flex">
+            <Award className="h-4 w-4 text-amber-400" />
+            <span>Research-Grade Evaluation</span>
+          </div>
+
           {onViewChange && (
-            <div className="flex items-center bg-[#02130d] border border-emerald-500/30 p-1 rounded-xl">
+            <nav className="flex items-center rounded-xl border border-amber-500/30 bg-slate-900/60 p-1" aria-label="Primary navigation">
               <button
+                type="button"
                 onClick={() => onViewChange("dashboard")}
-                className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                className={`inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold transition-all sm:px-4 cursor-pointer ${
                   activeView === "dashboard"
-                    ? "bg-emerald-500 text-black shadow-[0_0_12px_rgba(16,185,129,0.4)]"
-                    : "text-gray-400 hover:text-white"
+                    ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20"
+                    : "text-slate-300 hover:bg-white/10 hover:text-white"
                 }`}
               >
-                ATS Dashboard
+                <LayoutDashboard className="h-4 w-4" />
+                <span>Analyzer Dashboard</span>
               </button>
               <button
+                type="button"
                 onClick={() => onViewChange("nlp_labs")}
-                className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1.5 ${
+                className={`inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold transition-all sm:px-4 cursor-pointer ${
                   activeView === "nlp_labs"
-                    ? "bg-[#FFD54A] text-black shadow-[0_0_12px_rgba(255,213,74,0.4)]"
-                    : "text-[#FFD54A]/80 hover:text-[#FFD54A]"
+                    ? "bg-teal-500 text-slate-950 font-bold shadow-md shadow-teal-500/20"
+                    : "text-slate-300 hover:bg-white/10 hover:text-white"
                 }`}
               >
-                <Sparkles className="w-3.5 h-3.5" />
-                AI Assistant
+                <BookOpen className="h-4 w-4" />
+                <span>NLP Lab Modules</span>
               </button>
-            </div>
+            </nav>
           )}
         </div>
       </div>
