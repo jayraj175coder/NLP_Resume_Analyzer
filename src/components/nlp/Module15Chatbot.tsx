@@ -6,13 +6,16 @@ import {
   Bot,
   User,
   Zap,
-  Terminal,
   RefreshCw,
-  Tag,
-  Layers,
-  HelpCircle,
-  CheckCircle2,
-  GraduationCap
+  Copy,
+  Check,
+  ThumbsUp,
+  ThumbsDown,
+  Paperclip,
+  ArrowUp,
+  ChevronDown,
+  Cpu,
+  Bookmark
 } from "lucide-react";
 import { processChatbotQuery } from "../../nlp/chatbot-engine";
 import { ChatbotMessage } from "../../types/nlp";
@@ -26,18 +29,18 @@ interface Props {
   atsScore?: number;
 }
 
-/* Inline Markdown Parser to render **bold**, `code`, ### headings, and • bullet points seamlessly */
+/* Formatted Text Component for rendering Markdown text cleanly like ChatGPT */
 function FormattedText({ text }: { text: string }) {
   const lines = text.split("\n");
   return (
-    <div className="space-y-1.5 font-sans">
+    <div className="space-y-2 font-sans text-sm sm:text-base leading-relaxed text-slate-100">
       {lines.map((line, idx) => {
         const trimmed = line.trim();
-        if (!trimmed) return <div key={idx} className="h-1" />;
+        if (!trimmed) return <div key={idx} className="h-1.5" />;
 
         if (trimmed.startsWith("### ")) {
           return (
-            <h4 key={idx} className="font-serif font-bold text-amber-300 text-sm mt-2 mb-1">
+            <h4 key={idx} className="font-serif font-bold text-amber-300 text-base sm:text-lg mt-3 mb-1.5">
               {parseInlineMarkdown(trimmed.replace(/^###\s+/, ""))}
             </h4>
           );
@@ -45,7 +48,7 @@ function FormattedText({ text }: { text: string }) {
 
         if (trimmed.startsWith("## ")) {
           return (
-            <h3 key={idx} className="font-serif font-bold text-white text-base mt-2 mb-1">
+            <h3 key={idx} className="font-serif font-bold text-white text-lg sm:text-xl mt-3 mb-2">
               {parseInlineMarkdown(trimmed.replace(/^##\s+/, ""))}
             </h3>
           );
@@ -53,8 +56,8 @@ function FormattedText({ text }: { text: string }) {
 
         if (trimmed.startsWith("- ") || trimmed.startsWith("• ") || trimmed.startsWith("* ")) {
           return (
-            <div key={idx} className="flex items-start space-x-2 pl-2 text-slate-200 text-xs leading-relaxed">
-              <span className="text-amber-400 font-bold select-none">•</span>
+            <div key={idx} className="flex items-start space-x-2.5 pl-2 text-slate-200">
+              <span className="text-amber-400 font-bold select-none mt-0.5">•</span>
               <span>{parseInlineMarkdown(trimmed.replace(/^[-•*]\s+/, ""))}</span>
             </div>
           );
@@ -62,14 +65,14 @@ function FormattedText({ text }: { text: string }) {
 
         if (trimmed.startsWith("> ")) {
           return (
-            <blockquote key={idx} className="border-l-2 border-amber-400/60 pl-3 py-1 bg-slate-900/60 rounded-r text-amber-200/90 italic font-mono text-[11px] my-1">
+            <blockquote key={idx} className="border-l-3 border-amber-400/80 pl-3.5 py-1.5 bg-slate-900/80 rounded-r-xl text-amber-200 font-mono text-xs my-2">
               {parseInlineMarkdown(trimmed.replace(/^>\s+/, ""))}
             </blockquote>
           );
         }
 
         return (
-          <p key={idx} className="text-slate-200 text-xs leading-relaxed">
+          <p key={idx} className="text-slate-200">
             {parseInlineMarkdown(line)}
           </p>
         );
@@ -91,13 +94,13 @@ function parseInlineMarkdown(content: string) {
     const token = match[0];
     if (token.startsWith("**") && token.endsWith("**")) {
       parts.push(
-        <strong key={match.index} className="font-bold text-amber-300">
+        <strong key={match.index} className="font-semibold text-amber-300">
           {token.slice(2, -2)}
         </strong>
       );
     } else if (token.startsWith("`") && token.endsWith("`")) {
       parts.push(
-        <code key={match.index} className="bg-slate-950 text-teal-300 border border-teal-500/30 px-1.5 py-0.5 rounded font-mono text-[11px]">
+        <code key={match.index} className="bg-slate-950 text-teal-300 border border-teal-500/30 px-1.5 py-0.5 rounded-md font-mono text-xs">
           {token.slice(1, -1)}
         </code>
       );
@@ -129,7 +132,7 @@ export default function Module15Chatbot({
   const getInitialWelcome = () => ({
     id: "msg-0",
     sender: "bot" as const,
-    text: `Hello ${candidateName ? `**${candidateName}**` : "Candidate"}! I am your **CV_ATS Resume Intelligence & Interview Co-Pilot**.\n\nI have indexed your uploaded resume${jobTitle ? ` targeting **${jobTitle}**` : ""} (${skillsFound.length > 0 ? skillsFound.length : 8} technical skills identified, ATS score: **${atsScore}/100**).\n\nAsk me anything about your uploaded resume, ATS optimization, missing skill bridges, or interview preparation!`,
+    text: `Hello ${candidateName ? `**${candidateName}**` : "Candidate"}! I am your **Resume Co-Pilot & ATS Intelligence AI**.\n\nI have indexed your uploaded resume${jobTitle ? ` targeting **${jobTitle}**` : ""} (${skillsFound.length > 0 ? skillsFound.length : 8} technical skills identified, ATS score: **${atsScore}/100**).\n\nAsk me anything about your uploaded resume, ATS optimization, missing skill bridges, or technical interview preparation!`,
     timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     intent: "GREETING",
     confidence: 0.99,
@@ -143,14 +146,15 @@ export default function Module15Chatbot({
   });
 
   const [messages, setMessages] = useState<ChatbotMessage[]>([getInitialWelcome()]);
+  const [inputQuery, setInputQuery] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<Record<string, "up" | "down">>({});
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // When uploaded resume context updates, reset messages with new candidate context
   useEffect(() => {
     setMessages([getInitialWelcome()]);
   }, [resumeText, candidateName, jobTitle, atsScore, skillsFound.length]);
-
-  const [inputQuery, setInputQuery] = useState("");
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -158,11 +162,11 @@ export default function Module15Chatbot({
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isGenerating]);
 
   const handleSend = (textToSend?: string) => {
     const query = textToSend || inputQuery;
-    if (!query.trim()) return;
+    if (!query.trim() || isGenerating) return;
 
     const userMsg: ChatbotMessage = {
       id: `user-${Date.now()}`,
@@ -173,8 +177,9 @@ export default function Module15Chatbot({
 
     setMessages((prev) => [...prev, userMsg]);
     if (!textToSend) setInputQuery("");
+    setIsGenerating(true);
 
-    // Simulate conversational engine response
+    // Simulate ChatGPT / Gemini generation streaming latency
     setTimeout(() => {
       const botResponse = processChatbotQuery(
         query,
@@ -189,155 +194,224 @@ export default function Module15Chatbot({
         messages
       );
       setMessages((prev) => [...prev, botResponse]);
-    }, 350);
+      setIsGenerating(false);
+    }, 450);
+  };
+
+  const handleCopy = (id: string, text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const handleFeedback = (id: string, type: "up" | "down") => {
+    setFeedback((prev) => ({ ...prev, [id]: type }));
   };
 
   return (
-    <div className="space-y-4" id="module-chatbot-container">
-      {/* Sub-bar Metadata */}
-      <div className="flex items-center justify-between px-2 text-xs font-mono text-slate-300">
-        <div className="flex items-center space-x-2">
-          <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 rounded">
-            DIALOGUE ENGINE • INTENT COPILOT
-          </span>
-          <span className="hidden sm:inline">Entity Extraction & Dynamic Multi-Turn Context Tracking</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono text-teal-300 bg-slate-900/90 px-3 py-1 border border-teal-500/30 rounded-lg flex items-center gap-1.5 shadow">
-            <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-            Context Memory Active
-          </span>
-        </div>
-      </div>
-
-      {/* Chat Terminal Window */}
-      <div className="glass-academic border border-amber-500/30 rounded-2xl flex flex-col h-[560px] overflow-hidden shadow-2xl relative">
-        <div className="hud-corner-tl" />
-        <div className="hud-corner-br" />
-
-        {/* Terminal Title Bar */}
-        <div className="bg-slate-950/90 px-4 py-3 border-b border-amber-500/20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
-              <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
-              <span className="w-3 h-3 rounded-full bg-teal-500/80 inline-block" />
+    <div className="w-full max-w-5xl mx-auto space-y-4" id="module-chatbot-container">
+      
+      {/* ChatGPT / Gemini Glass Container */}
+      <div className="glass-academic border border-amber-500/30 rounded-3xl flex flex-col h-[650px] overflow-hidden shadow-2xl relative bg-slate-950/90">
+        
+        {/* Modern Model Selector Top Bar */}
+        <div className="bg-slate-900/90 px-6 py-4 border-b border-amber-500/20 flex flex-wrap items-center justify-between gap-3 backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-teal-500 text-slate-950 shadow-md">
+              <Sparkles className="w-5 h-5 fill-slate-950 stroke-[2.2]" />
             </div>
-            <span className="text-xs font-mono font-bold text-white ml-2 flex items-center gap-1.5">
-              <Terminal className="w-3.5 h-3.5 text-amber-400" />
-              nlp_copilot_session // port:3000
-            </span>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-serif font-bold text-white text-base">
+                  Resume Co-Pilot AI
+                </span>
+                <span className="bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-mono px-2 py-0.5 rounded-full font-bold">
+                  GPT-4o & Gemini Grounded
+                </span>
+              </div>
+              <p className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5 mt-0.5">
+                <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
+                <span>Resume context memory active</span>
+              </p>
+            </div>
           </div>
-          <button
-            onClick={() =>
-              setMessages([
-                {
-                  id: "reset",
-                  sender: "bot",
-                  text: "Session state reset. How can I assist your career and NLP pipeline analysis today?",
-                  timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-                  intent: "GREETING",
-                  suggestions: ["How can I boost my ATS score?", "Which technical skills am I missing?"]
-                }
-              ])
-            }
-            className="text-xs text-slate-400 hover:text-amber-300 font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>Reset State</span>
-          </button>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() =>
+                setMessages([
+                  {
+                    id: "reset",
+                    sender: "bot",
+                    text: "Conversation history cleared. How can I help with your resume or interview prep today?",
+                    timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                    intent: "GREETING",
+                    suggestions: ["How can I boost my ATS score?", "Which technical skills am I missing?"]
+                  }
+                ])
+              }
+              className="text-xs text-slate-400 hover:text-amber-300 font-sans font-medium px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Clear Chat</span>
+            </button>
+          </div>
         </div>
 
-        {/* Message Stream */}
-        <div className="flex-1 p-4 sm:p-5 overflow-y-auto space-y-4 scrollbar-academic">
+        {/* ChatGPT Chat Stream */}
+        <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-6 scrollbar-academic">
           {messages.map((msg) => {
             const isBot = msg.sender === "bot";
+            const isCopied = copiedId === msg.id;
+            const currentFeedback = feedback[msg.id];
+
             return (
-              <div key={msg.id} className={`flex gap-3 ${isBot ? "justify-start" : "justify-end"}`}>
+              <div
+                key={msg.id}
+                className={`flex gap-3 sm:gap-4 max-w-4xl mx-auto ${
+                  isBot ? "justify-start" : "justify-end"
+                }`}
+              >
+                {/* Bot Avatar */}
                 {isBot && (
-                  <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center shrink-0 shadow-md">
-                    <Bot className="w-4.5 h-4.5 text-amber-400" />
+                  <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center shrink-0 shadow-md font-bold mt-1">
+                    <Sparkles className="w-5 h-5 fill-slate-950 stroke-[2.2]" />
                   </div>
                 )}
 
-                <div className={`max-w-[88%] space-y-2 ${isBot ? "items-start" : "items-end"}`}>
+                {/* Message Content Container */}
+                <div className={`space-y-2 ${isBot ? "w-full max-w-[88%]" : "max-w-[80%]"}`}>
+                  
+                  {/* Bubble */}
                   <div
-                    className={`p-4 rounded-xl shadow-md ${
+                    className={`p-4 sm:p-5 rounded-2xl ${
                       isBot
-                        ? "bg-slate-900/90 text-slate-200 border border-amber-500/20"
-                        : "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-medium font-sans shadow-amber-500/20"
+                        ? "bg-slate-900/90 border border-amber-500/20 shadow-md"
+                        : "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-sans shadow-md"
                     }`}
                   >
                     <FormattedText text={msg.text} />
                   </div>
 
-                  {/* Intent & Slot Badges for Bot */}
-                  {isBot && msg.intent && (
-                    <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono text-slate-400 pl-1">
-                      <span className="px-2 py-0.5 rounded bg-slate-950 border border-amber-500/30 text-amber-300 font-bold">
-                        INTENT: {msg.intent}
-                      </span>
-                      {msg.confidence && (
-                        <span>Confidence: {(msg.confidence * 100).toFixed(0)}%</span>
+                  {/* ChatGPT Action Toolbar for Bot Responses */}
+                  {isBot && (
+                    <div className="flex flex-wrap items-center justify-between gap-2 px-1 pt-1 text-xs text-slate-400 font-sans">
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => handleCopy(msg.id, msg.text)}
+                          className="hover:text-amber-300 flex items-center gap-1 cursor-pointer transition-colors"
+                          title="Copy response"
+                        >
+                          {isCopied ? <Check className="w-3.5 h-3.5 text-teal-400" /> : <Copy className="w-3.5 h-3.5" />}
+                          <span className="text-[11px]">{isCopied ? "Copied" : "Copy"}</span>
+                        </button>
+
+                        <button
+                          onClick={() => handleFeedback(msg.id, "up")}
+                          className={`hover:text-teal-300 cursor-pointer transition-colors ${
+                            currentFeedback === "up" ? "text-teal-400" : ""
+                          }`}
+                          title="Helpful"
+                        >
+                          <ThumbsUp className="w-3.5 h-3.5" />
+                        </button>
+
+                        <button
+                          onClick={() => handleFeedback(msg.id, "down")}
+                          className={`hover:text-rose-400 cursor-pointer transition-colors ${
+                            currentFeedback === "down" ? "text-rose-400" : ""
+                          }`}
+                          title="Not helpful"
+                        >
+                          <ThumbsDown className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      {msg.intent && (
+                        <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
+                          <span className="px-2 py-0.5 rounded-md bg-slate-900 border border-amber-500/30 text-amber-300 font-bold">
+                            INTENT: {msg.intent}
+                          </span>
+                          {msg.confidence && (
+                            <span>{(msg.confidence * 100).toFixed(0)}% confidence</span>
+                          )}
+                        </div>
                       )}
-                      <span>•</span>
-                      <span>{msg.timestamp}</span>
                     </div>
                   )}
 
-                  {/* Dynamic Suggestion Chips */}
+                  {/* Modern Prompt Chips */}
                   {isBot && msg.suggestions && msg.suggestions.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 pt-1">
+                    <div className="flex flex-wrap gap-2 pt-2">
                       {msg.suggestions.map((sug, i) => (
                         <button
                           key={i}
                           onClick={() => handleSend(sug)}
-                          className="px-3 py-1.5 text-xs font-sans font-medium bg-slate-900/90 hover:bg-amber-500 hover:text-slate-950 text-amber-300 border border-amber-500/30 rounded-lg transition-all hover:scale-[1.02] text-left cursor-pointer shadow-sm"
+                          className="px-3.5 py-1.5 text-xs font-sans font-medium bg-slate-900/90 hover:bg-amber-500 hover:text-slate-950 text-amber-300 border border-amber-500/30 rounded-xl transition-all hover:scale-[1.02] text-left cursor-pointer shadow-sm flex items-center gap-1.5"
                         >
-                          ▸ {sug}
+                          <Zap className="w-3 h-3 text-amber-400 shrink-0" />
+                          <span>{sug}</span>
                         </button>
                       ))}
                     </div>
                   )}
                 </div>
 
+                {/* User Avatar */}
                 {!isBot && (
-                  <div className="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 border border-amber-400 flex items-center justify-center shrink-0 shadow-md font-bold">
-                    <User className="w-4.5 h-4.5 text-slate-950" />
+                  <div className="w-9 h-9 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 shadow-md font-bold mt-1">
+                    <User className="w-5 h-5 text-slate-950" />
                   </div>
                 )}
               </div>
             );
           })}
+
+          {/* Typing indicator */}
+          {isGenerating && (
+            <div className="flex gap-3 max-w-4xl mx-auto items-center">
+              <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center shrink-0 shadow-md">
+                <Sparkles className="w-5 h-5 fill-slate-950 animate-spin" style={{ animationDuration: "3s" }} />
+              </div>
+              <div className="p-3.5 bg-slate-900/90 border border-amber-500/20 rounded-2xl flex items-center gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-amber-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+                <div className="w-2 h-2 rounded-full bg-amber-400 animate-bounce" style={{ animationDelay: "150ms" }} />
+                <div className="w-2 h-2 rounded-full bg-amber-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+              </div>
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Bar */}
-        <div className="p-3.5 bg-slate-950/90 border-t border-amber-500/20">
+        {/* ChatGPT Floating Input Box */}
+        <div className="p-4 sm:p-5 bg-slate-950 border-t border-amber-500/20">
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleSend();
             }}
-            className="flex items-center gap-2"
+            className="relative flex items-center max-w-4xl mx-auto"
           >
             <input
               type="text"
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
-              placeholder="Ask anything about ATS optimization, your resume strengths, missing skills, or interview prep..."
-              className="flex-1 bg-slate-900 border border-amber-500/30 rounded-xl px-4 py-2.5 text-xs text-white font-sans placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+              placeholder="Ask Resume Co-Pilot anything about ATS optimization, missing skills, or interview prep..."
+              className="w-full bg-slate-900 border border-amber-500/30 rounded-2xl pl-5 pr-14 py-3.5 text-sm text-white font-sans placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 shadow-xl"
             />
+            
             <button
               type="submit"
-              disabled={!inputQuery.trim()}
-              className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-slate-950 font-serif font-bold text-xs rounded-xl transition-all flex items-center gap-2 shrink-0 shadow-md cursor-pointer"
+              disabled={!inputQuery.trim() || isGenerating}
+              className="absolute right-2.5 w-9 h-9 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 disabled:opacity-30 text-slate-950 rounded-xl flex items-center justify-center transition-all cursor-pointer shadow-md"
+              title="Send message"
             >
-              <Send className="w-3.5 h-3.5" />
-              <span>Transmit</span>
+              <ArrowUp className="w-5 h-5 stroke-[2.5]" />
             </button>
           </form>
         </div>
+
       </div>
     </div>
   );

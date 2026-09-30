@@ -35,11 +35,6 @@ export default function Header({ activeView = "dashboard", onViewChange }: Heade
         </button>
 
         <div className="flex items-center gap-2 sm:gap-4">
-          <div className="hidden items-center gap-2 text-xs text-slate-300 bg-slate-800/50 border border-slate-700/60 px-3 py-1.5 rounded-lg lg:flex">
-            <Award className="h-4 w-4 text-amber-400" />
-            <span>Research-Grade Evaluation</span>
-          </div>
-
           {onViewChange && (
             <nav className="flex items-center rounded-xl border border-amber-500/30 bg-slate-900/60 p-1" aria-label="Primary navigation">
               <button
