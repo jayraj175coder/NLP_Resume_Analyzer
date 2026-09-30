@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
 import {
-  Cpu,
-  Terminal,
-  Shield,
-  Award,
   Sparkles,
-  Brain,
-  History,
-  ListRestart,
-  Zap,
-  Activity,
-  Layers,
-  Binary,
-  Code2,
-  CheckCircle2,
+  BookOpen,
   AlertOctagon,
-  BookOpen
+  GraduationCap,
+  Award,
+  Zap,
+  CheckCircle2,
+  FileSpreadsheet,
+  Brain,
+  BookmarkCheck,
+  Search,
+  BookMarked
 } from "lucide-react";
-import CyberBackground from "./components/CyberBackground";
+import AcademicBackground from "./components/CyberBackground";
 import Header from "./components/Header";
 import UploadSection from "./components/UploadSection";
 import Dashboard from "./components/Dashboard";
@@ -34,13 +30,12 @@ export default function App() {
   const [analyzingTip, setAnalyzingTip] = useState("");
 
   const tips = [
-    "PARSING_STRUCTURE // READING PDF & DOCX VECTORS...",
-    "TOKENIZER_ENGINE // STRIPPING COMMON STOPWORDS...",
-    "LEMMA_MATRIX // COMPUTING BASE WORD MORPHEMES...",
-    "TF-IDF_VECTORIZER // BUILDING HIGH-DIMENSIONAL TERM MATRICES...",
-    "COSINE_SIMILARITY // COMPUTING ANGULAR DISTANCE OVER RESUME VECTORS...",
-    "NER_SCANNER // EXTRACTING TECH ROLES, COMPANIES & DATES...",
-    "INSIGHT_ENGINE // GENERATING ATS RECOMMENDATIONS & BULLET REWRITES..."
+    "PARSER_MODULE // Reading document vector structure...",
+    "LEXICAL_LAB // Filtering stop-words & computing lemma matrices...",
+    "TFIDF_VECTORIZER // Constructing term-frequency inverse weights...",
+    "COSINE_METRIC // Evaluating angular distance across resume vectors...",
+    "NER_SCANNER // Extracting tech roles, qualifications & metrics...",
+    "SCHOLAR_ENGINE // Formulating ATS recommendations & bullet rewrites..."
   ];
 
   // Fetch reports history from backend SQLite on load
@@ -60,7 +55,7 @@ export default function App() {
     fetchHistory();
   }, []);
 
-  // Staggered animated terminal logs during active audits
+  // Rotate helpful progress messages during analysis.
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (loading) {
@@ -194,11 +189,11 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen text-slate-100 flex flex-col font-sans relative antialiased selection:bg-[#FFD54A] selection:text-[#021E14]">
-      {/* Interactive Cyber Particle Canvas & Glowing Grid */}
-      <CyberBackground />
+    <div className="min-h-screen text-slate-100 flex flex-col font-sans relative antialiased selection:bg-[#F59E0B] selection:text-[#0B132B]">
+      {/* Subtle academic background texture */}
+      <AcademicBackground />
 
-      {/* Cyber Header Navigation */}
+      {/* Main navigation */}
       <Header activeView={activeView} onViewChange={setActiveView} />
 
       {activeView === "nlp_labs" ? (
@@ -211,71 +206,71 @@ export default function App() {
       ) : (
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 z-10 print:p-0">
           
-          {/* Massive Hero Section */}
-          <div className="space-y-4 text-center max-w-4xl mx-auto pt-2 pb-4 print:hidden">
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              <div className="inline-flex items-center space-x-2 bg-[#01140D] border border-[#00F5A0]/40 px-3.5 py-1 rounded-full text-xs font-mono text-[#00F5A0] shadow-[0_0_15px_rgba(0,245,160,0.15)]">
-                <span className="w-2 h-2 rounded-full bg-[#00F5A0] animate-ping" />
-                <span className="font-bold tracking-wider">HACKER_GRADE ATS BENCHMARKING ENGINE</span>
+          {/* Introduction */}
+          <div className="space-y-4 text-center max-w-4xl mx-auto pt-6 pb-6 print:hidden">
+            <div className="flex flex-wrap items-center justify-center gap-2.5">
+              <div className="inline-flex items-center space-x-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-xs font-semibold text-amber-200 shadow-md shadow-amber-500/10">
+                <GraduationCap className="h-4 w-4 text-amber-400" />
+                <span>Peer-Reviewed Academic NLP & ATS Evaluator</span>
               </div>
               <button
                 onClick={() => setActiveView("nlp_labs")}
-                className="inline-flex items-center space-x-1.5 bg-[#FFD54A]/10 border border-[#FFD54A]/40 px-3.5 py-1 rounded-full text-xs font-mono text-[#FFD54A] hover:bg-[#FFD54A]/20 transition-all font-bold cursor-pointer"
+                className="inline-flex items-center space-x-1.5 bg-teal-500/10 border border-teal-500/40 px-4 py-1.5 rounded-full text-xs font-mono text-teal-300 hover:bg-teal-500/20 transition-all font-bold cursor-pointer"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>NLP LEARNING LAB ▸</span>
+                <span>Explore Interactive NLP Lab</span>
               </button>
             </div>
 
-            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight text-white leading-tight">
-              Crack The <span className="text-[#FFD54A] glow-yellow">Recruiter Algorithm</span>
-            </h2>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-extrabold tracking-tight text-white leading-tight">
+              Optimize Every Resume with <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-teal-300">Academic Precision</span>
+            </h1>
 
-            <p className="text-sm sm:text-base text-emerald-100/70 font-sans max-w-2xl mx-auto leading-relaxed">
-              Autonomous vector NLP parser and TF-IDF matrix scorer engineered to provide clear ATS-focused feedback.
+            <p className="text-base sm:text-lg text-slate-300 font-sans max-w-2xl mx-auto leading-relaxed">
+              Evaluate your resume against target job requirements using mathematical TF-IDF vectorization, entity extraction, and scholarly ATS scoring.
             </p>
           </div>
 
         {/* Error Alert Box */}
         {errorMessage && (
-          <div className="glass-cyber border-rose-600/50 p-4 rounded-xl flex items-center space-x-3 text-rose-300 text-xs sm:text-sm max-w-3xl mx-auto print:hidden shadow-[0_0_20px_rgba(225,29,72,0.2)]">
+          <div className="glass-academic border-rose-500/60 p-4 rounded-xl flex items-center space-x-3 text-rose-200 text-xs sm:text-sm max-w-3xl mx-auto print:hidden shadow-lg shadow-rose-950/30">
             <AlertOctagon className="w-5 h-5 text-rose-400 shrink-0" />
             <div className="min-w-0">
-              <strong className="font-mono text-rose-400 block uppercase">RUNTIME FAULT DETECTED:</strong>
+              <strong className="font-semibold text-rose-200 block">We could not complete the analysis</strong>
               <span>{errorMessage}</span>
             </div>
           </div>
         )}
 
-        {/* Upload Terminal Component */}
+        {/* Resume input */}
         <div className="print:hidden">
           <UploadSection onAnalyze={handleAnalyze} loading={loading} />
         </div>
 
-        {/* Animated Cyber Terminal Loading State */}
+        {/* Analysis progress */}
         {loading && (
-          <div className="glass-cyber-yellow rounded-2xl p-10 text-center relative overflow-hidden flex flex-col items-center justify-center min-h-[320px] print:hidden">
+          <div className="glass-academic-gold rounded-2xl p-10 text-center relative overflow-hidden flex flex-col items-center justify-center min-h-[320px] print:hidden">
             <div className="hud-corner-tl" />
             <div className="hud-corner-tr" />
             <div className="hud-corner-bl" />
             <div className="hud-corner-br" />
 
-            {/* Radar scanner sweep */}
+            {/* Scholarly Neural Vector Pulse */}
             <div className="relative mb-6">
-              <div className="w-20 h-20 rounded-full border-2 border-dashed border-[#FFD54A] flex items-center justify-center animate-radar">
-                <div className="w-12 h-12 rounded-full border border-[#00F5A0] animate-ping opacity-60" />
+              <div className="w-20 h-20 rounded-full border-2 border-dashed border-amber-400 flex items-center justify-center animate-spin" style={{ animationDuration: '8s' }}>
+                <div className="w-12 h-12 rounded-full border border-teal-400 animate-ping opacity-60" />
               </div>
               <div className="absolute inset-0 flex items-center justify-center">
-                <Zap className="w-6 h-6 text-[#FFD54A] fill-[#FFD54A] animate-pulse" />
+                <Brain className="w-7 h-7 text-amber-400 fill-amber-400/30 animate-pulse" />
               </div>
             </div>
 
             <div className="space-y-3 max-w-md">
-              <div className="inline-block bg-[#01140D] px-3 py-1 rounded border border-[#FFD54A]/40 text-[#FFD54A] text-xs font-mono font-bold tracking-wider animate-pulse">
+              <div className="inline-block bg-slate-900/90 px-4 py-1.5 rounded-md border border-amber-400/40 text-amber-300 text-xs font-mono font-bold tracking-wider animate-pulse">
                 &gt; {analyzingTip}
               </div>
-              <p className="text-xs text-emerald-300/80 font-mono">
-                Extracting tokens • Computing cosine similarities • Generating recommendations...
+              <p className="text-xs text-slate-300 font-sans">
+                Reading your document, matching key skill matrices, and building your academic report.
               </p>
             </div>
           </div>
@@ -288,7 +283,7 @@ export default function App() {
           </div>
         )}
 
-        {/* Bottom Panel Grid (History & Technical NLP FAQ) */}
+        {/* History and method overview */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 print:hidden pt-4">
           
           {/* History Management column */}
@@ -301,44 +296,44 @@ export default function App() {
             />
           </div>
 
-          {/* Applied NLP Terminal Mechanics HUD */}
-          <div className="glass-cyber rounded-2xl p-6 relative overflow-hidden space-y-4">
+          {/* How the analysis works */}
+          <div className="glass-academic rounded-2xl p-6 relative overflow-hidden space-y-4">
             <div className="hud-corner-tl" />
             <div className="hud-corner-br" />
 
-            <div className="flex items-center space-x-2 text-xs font-mono font-bold text-[#FFD54A] pb-3 border-b border-[#00F5A0]/15">
-              <Terminal className="w-4 h-4 text-[#FFD54A]" />
-              <span>APPLIED NLP ARCHITECTURE</span>
+            <div className="flex items-center space-x-2 text-xs font-mono font-bold text-amber-400 pb-3 border-b border-amber-500/20">
+              <BookMarked className="w-4 h-4 text-amber-400" />
+              <span>SCHOLARLY EVALUATION METHODOLOGY</span>
             </div>
 
             <div className="space-y-4 text-xs">
-              <div className="p-3 bg-[#01140D]/90 rounded-xl border border-[#00F5A0]/20 space-y-1">
-                <h4 className="font-display font-bold text-white flex items-center space-x-1.5">
-                  <span className="text-[#FFD54A] font-mono">[01]</span>
-                  <span>Cosine Similarity Vector Matrix</span>
-                </h4>
+              <div className="p-3.5 bg-slate-900/80 rounded-xl border border-amber-500/20 space-y-1">
+                <h3 className="font-serif font-bold text-white text-sm flex items-center space-x-1.5">
+                  <span className="text-amber-400 font-mono">[01]</span>
+                  <span>Cosine Similarity Vector Space</span>
+                </h3>
                 <p className="text-slate-300 text-[11px] leading-relaxed font-sans">
-                  Calculates angular distance between the multidimensional TF-IDF vectors of your resume and the target JD. Outputs true semantic overlap score.
+                  Calculates angular distance between multi-dimensional TF-IDF vectors of your resume and target job requirements for objective semantic match scores.
                 </p>
               </div>
 
-              <div className="p-3 bg-[#01140D]/90 rounded-xl border border-[#00F5A0]/20 space-y-1">
-                <h4 className="font-display font-bold text-white flex items-center space-x-1.5">
-                  <span className="text-[#00F5A0] font-mono">[02]</span>
+              <div className="p-3.5 bg-slate-900/80 rounded-xl border border-amber-500/20 space-y-1">
+                <h3 className="font-serif font-bold text-white text-sm flex items-center space-x-1.5">
+                  <span className="text-teal-400 font-mono">[02]</span>
                   <span>TF-IDF Token Weighting</span>
-                </h4>
+                </h3>
                 <p className="text-slate-300 text-[11px] leading-relaxed font-sans">
-                  Term Frequency - Inverse Document Frequency boosts domain-specific tech terms (React, Docker, PyTorch) while dampening general vocabulary.
+                  Term Frequency-Inverse Document Frequency highlights domain-specific engineering & research terminology while dampening high-frequency noise words.
                 </p>
               </div>
 
-              <div className="p-3 bg-[#01140D]/90 rounded-xl border border-[#00F5A0]/20 space-y-1">
-                <h4 className="font-display font-bold text-white flex items-center space-x-1.5">
-                  <span className="text-[#38BDF8] font-mono">[03]</span>
+              <div className="p-3.5 bg-slate-900/80 rounded-xl border border-amber-500/20 space-y-1">
+                <h3 className="font-serif font-bold text-white text-sm flex items-center space-x-1.5">
+                  <span className="text-cyan-400 font-mono">[03]</span>
                   <span>Named Entity Recognition (NER)</span>
-                </h4>
+                </h3>
                 <p className="text-slate-300 text-[11px] leading-relaxed font-sans">
-                  Scans and classifies structured entities including organizations, job titles, dates, degrees, contact protocols, and action verbs.
+                  Parses and categorizes credentials, technological frameworks, metrics, publication markers, and leadership action verbs.
                 </p>
               </div>
             </div>
@@ -349,17 +344,17 @@ export default function App() {
       </main>
       )}
 
-      {/* Cyberpunk Footer */}
-      <footer className="bg-[#01140D]/90 border-t border-[#00F5A0]/20 py-6 mt-12 text-center print:hidden">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-emerald-400/70">
+      {/* Footer */}
+      <footer className="bg-slate-950/90 border-t border-amber-500/20 py-6 mt-12 text-center print:hidden">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-300">
           <div className="flex items-center space-x-2">
-            <span className="w-2 h-2 rounded-full bg-[#00F5A0]" />
-            <span>CYBER_ATS INTELLIGENCE MATRIX • FULL STACK NLP PRODUCTION SYSTEM</span>
+            <span className="w-2 h-2 rounded-full bg-amber-400" />
+            <span>SCHOLAR RESUME AI • ACADEMIC & RESEARCH EVALUATOR</span>
           </div>
           <div className="flex items-center space-x-3 text-slate-400">
-            <span>DATABASE: SQLITE 3.x</span>
+            <span>Private analysis workspace</span>
             <span>•</span>
-            <span className="text-[#FFD54A]">SECURITY: ZERO-LEAK AIRGAP</span>
+            <span className="text-amber-400 font-semibold">Scholar Grade Evaluation</span>
           </div>
         </div>
       </footer>

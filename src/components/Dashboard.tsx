@@ -128,7 +128,7 @@ export default function Dashboard({ data }: DashboardProps) {
     <div id="printable-report-area" className="space-y-6">
       {/* Print-Only Title Header */}
       <div className="hidden print:block border-b-2 border-slate-900 pb-4 mb-6">
-        <h1 className="text-2xl font-bold text-slate-950">CYBER_ATS // RESUME INTELLIGENCE REPORT</h1>
+        <h1 className="text-2xl font-bold text-slate-950">Resume Analysis Report</h1>
         <p className="text-xs font-mono text-slate-500">Evaluated via TF-IDF Vectorizer, Cosine Similarity & Rule-Based NLP</p>
         <div className="grid grid-cols-2 gap-4 mt-4 text-xs font-sans text-slate-800">
           <div>
@@ -143,7 +143,7 @@ export default function Dashboard({ data }: DashboardProps) {
         </div>
       </div>
 
-      {/* Hero Dossier Card */}
+      {/* Report overview */}
       <div className="glass-cyber rounded-2xl p-6 sm:p-8 relative overflow-hidden print:border-none print:shadow-none print:p-0">
         <div className="hud-corner-tl" />
         <div className="hud-corner-tr" />
@@ -157,7 +157,7 @@ export default function Dashboard({ data }: DashboardProps) {
                 {atsStatus.label}
               </span>
               <span className="text-[10px] font-mono text-emerald-400/70 bg-[#01140D] px-2.5 py-0.5 rounded border border-[#00F5A0]/20">
-                AUDIT ID: {data.reportId ? data.reportId.slice(0, 8).toUpperCase() : "MAT_704"}
+                REPORT ID: {data.reportId ? data.reportId.slice(0, 8).toUpperCase() : "RPT_704"}
               </span>
             </div>
 
@@ -184,7 +184,7 @@ export default function Dashboard({ data }: DashboardProps) {
           </div>
         </div>
 
-        {/* View Toggle Bar (Bento / Skills / Rewrites / Audits) */}
+        {/* Report navigation */}
         <div className="flex items-center space-x-2 pt-6 overflow-x-auto pb-1 print:hidden">
           <button
             onClick={() => setActiveView("bento")}
@@ -195,7 +195,7 @@ export default function Dashboard({ data }: DashboardProps) {
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>BENTO MATRIX VIEW</span>
+            <span>Overview</span>
           </button>
 
           <button

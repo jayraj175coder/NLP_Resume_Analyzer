@@ -8,7 +8,8 @@ import {
   Database,
   Search,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  BookMarked
 } from "lucide-react";
 import { ReportItem } from "../types";
 
@@ -50,25 +51,25 @@ export default function HistorySection({
   });
 
   return (
-    <div className="glass-cyber rounded-2xl p-6 relative overflow-hidden space-y-4">
-      {/* Cyber Corner Accents */}
+    <div className="glass-academic rounded-2xl p-6 relative overflow-hidden space-y-4">
+      {/* Card accents */}
       <div className="hud-corner-tl" />
       <div className="hud-corner-br" />
 
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#00F5A0]/15">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-amber-500/20">
         <div className="space-y-1">
           <div className="flex items-center space-x-2">
-            <Database className="w-4 h-4 text-[#FFD54A]" />
-            <h2 className="text-base font-display font-bold text-white tracking-wide">
-              Saved Audit History
+            <BookMarked className="w-4 h-4 text-amber-400" />
+            <h2 className="text-base font-serif font-bold text-white tracking-wide">
+              Evaluation Archives & Repository
             </h2>
-            <span className="text-[10px] font-mono font-bold bg-[#FFD54A]/10 text-[#FFD54A] border border-[#FFD54A]/30 px-2 py-0.5 rounded">
-              {reports.length} RECORDS
+            <span className="text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded">
+              {reports.length} ARCHIVED
             </span>
           </div>
-          <p className="text-xs text-slate-400 font-mono">
-            Persistent storage in SQLite database.
+          <p className="text-xs text-slate-300 font-sans">
+            Access past candidate evaluations or download complete dataset export.
           </p>
         </div>
 
@@ -76,10 +77,10 @@ export default function HistorySection({
           <a
             href="/api/export/csv"
             download
-            className="text-xs font-mono font-bold bg-[#01140D] hover:bg-[#FFD54A] hover:text-[#021E14] text-[#00F5A0] border border-[#00F5A0]/40 hover:border-[#FFD54A] px-3.5 py-1.5 rounded-lg flex items-center space-x-1.5 transition-all shadow shrink-0"
+            className="text-xs font-mono font-bold bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-amber-300 border border-amber-500/40 hover:border-amber-400 px-3.5 py-1.5 rounded-lg flex items-center space-x-1.5 transition-all shadow shrink-0 cursor-pointer"
           >
             <FileSpreadsheet className="w-3.5 h-3.5" />
-            <span>EXPORT CSV</span>
+            <span>EXPORT CSV DATA</span>
           </a>
         )}
       </div>
@@ -92,25 +93,25 @@ export default function HistorySection({
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search candidate name or target role..."
-            className="w-full bg-[#01140D]/90 border border-[#00F5A0]/20 rounded-lg pl-8 pr-3 py-1.5 text-xs font-mono text-emerald-200 placeholder-slate-500 focus:outline-none focus:border-[#FFD54A]"
+            placeholder="Search candidate name or role title..."
+            className="w-full bg-slate-900/90 border border-amber-500/20 rounded-lg pl-8 pr-3 py-1.5 text-xs font-mono text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-400"
           />
         </div>
       )}
 
       {/* Report Items List */}
       {reports.length === 0 ? (
-        <div className="border border-dashed border-[#00F5A0]/20 rounded-xl p-8 text-center bg-[#01140D]/40 space-y-2">
-          <History className="w-8 h-8 text-slate-600 mx-auto" />
+        <div className="border border-dashed border-amber-500/20 rounded-xl p-8 text-center bg-slate-900/40 space-y-2">
+          <History className="w-8 h-8 text-slate-500 mx-auto" />
           <p className="text-xs font-mono text-slate-400">
-            No audit records in SQLite database yet.
+            No archived evaluation records found.
           </p>
-          <p className="text-[11px] text-emerald-400/60 font-sans">
-            Run your first resume scan to populate the intelligence matrix.
+          <p className="text-[11px] text-amber-300/60 font-sans">
+            Run your first evaluation to generate paper archive records.
           </p>
         </div>
       ) : (
-        <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1 scrollbar-cyber">
+        <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1 scrollbar-academic">
           {filteredReports.map((report) => {
             const isSelected = report.id === selectedId;
             return (
@@ -119,24 +120,24 @@ export default function HistorySection({
                 onClick={() => onSelectReport(report)}
                 className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between group relative overflow-hidden ${
                   isSelected
-                    ? "bg-[#011E14] border-[#FFD54A] shadow-[0_0_15px_rgba(255,213,74,0.2)]"
-                    : "bg-[#01140D]/80 border-[#00F5A0]/20 hover:border-[#FFD54A]/50 hover:bg-[#022418]"
+                    ? "bg-slate-900 border-amber-400 shadow-md shadow-amber-500/20"
+                    : "bg-slate-900/60 border-amber-500/20 hover:border-amber-400/50 hover:bg-slate-850"
                 }`}
               >
                 {/* Active left indicator */}
                 {isSelected && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FFD54A]" />
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-400" />
                 )}
 
                 <div className="flex items-center space-x-3.5 min-w-0">
                   {/* Hex/Box Score Indicator */}
                   <div
-                    className={`w-11 h-11 rounded-lg flex flex-col items-center justify-center font-display font-extrabold text-xs shrink-0 border ${
+                    className={`w-11 h-11 rounded-lg flex flex-col items-center justify-center font-serif font-bold text-xs shrink-0 border ${
                       report.matchPercentage >= 75
-                        ? "bg-[#00F5A0]/10 text-[#00F5A0] border-[#00F5A0]/40"
+                        ? "bg-teal-500/15 text-teal-300 border-teal-500/40"
                         : report.matchPercentage >= 50
-                        ? "bg-[#FFD54A]/10 text-[#FFD54A] border-[#FFD54A]/40"
-                        : "bg-rose-950/40 text-rose-400 border-rose-800/40"
+                        ? "bg-amber-500/15 text-amber-300 border-amber-500/40"
+                        : "bg-rose-950/40 text-rose-300 border-rose-800/40"
                     }`}
                   >
                     <span>{report.matchPercentage}%</span>
@@ -144,10 +145,10 @@ export default function HistorySection({
                   </div>
 
                   <div className="min-w-0">
-                    <h3 className="text-xs font-display font-bold text-slate-100 truncate group-hover:text-[#FFD54A] transition-colors">
+                    <h3 className="text-xs font-serif font-bold text-slate-100 truncate group-hover:text-amber-300 transition-colors">
                       {report.candidateName}
                     </h3>
-                    <p className="text-[11px] font-mono text-emerald-300/80 truncate mt-0.5">
+                    <p className="text-[11px] font-mono text-teal-300/90 truncate mt-0.5">
                       {report.jobTitle}
                     </p>
                     <div className="flex items-center space-x-2 text-[9px] font-mono text-slate-400 mt-1">
@@ -164,8 +165,8 @@ export default function HistorySection({
                 </div>
 
                 <div className="flex items-center space-x-2 shrink-0">
-                  <span className="text-[10px] font-mono font-bold text-[#FFD54A] opacity-0 group-hover:opacity-100 transition-all flex items-center space-x-0.5">
-                    <span>INSPECT</span>
+                  <span className="text-[10px] font-mono font-bold text-amber-300 opacity-0 group-hover:opacity-100 transition-all flex items-center space-x-0.5">
+                    <span>VIEW</span>
                     <ArrowRight className="w-3 h-3" />
                   </span>
 
@@ -175,7 +176,7 @@ export default function HistorySection({
                       onDeleteReport(report.id);
                     }}
                     type="button"
-                    className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-950/40 border border-transparent hover:border-rose-900/40 transition-all"
+                    className="p-1.5 rounded-lg text-slate-500 hover:text-rose-300 hover:bg-rose-950/40 border border-transparent hover:border-rose-900/40 transition-all cursor-pointer"
                     title="Delete record"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
