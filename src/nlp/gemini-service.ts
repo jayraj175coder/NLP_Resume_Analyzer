@@ -10,7 +10,7 @@ export function getGeminiClient(): GoogleGenAI | null {
   if (!aiInstance) {
     const key = process.env.GEMINI_API_KEY;
     if (!key || key === "MY_GEMINI_API_KEY") {
-      console.warn("GEMINI_API_KEY is not defined or is a placeholder. Graceful fallback enabled.");
+      console.warn("GEMINI_API_KEY is not defined or is a placeholder. Graceful rule-based engine enabled.");
       return null;
     }
     aiInstance = new GoogleGenAI({
@@ -36,7 +36,7 @@ export interface GeminiAnalysisResult {
 }
 
 /**
- * Uses Gemini AI to perform deep resume optimization, ATS advice, and grammar check.
+ * Uses Gemini AI to perform fast resume optimization, ATS advice, and grammar checks.
  */
 export async function getGeminiAnalysis(resumeText: string, jdText: string): Promise<GeminiAnalysisResult> {
   const client = getGeminiClient();
@@ -48,28 +48,28 @@ export async function getGeminiAnalysis(resumeText: string, jdText: string): Pro
   try {
     const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
     const prompt = `
-You are an expert Executive Recruiter, Resume Writer, and ATS Specialist.
-Analyze the following Resume and Job Description (JD). Offer detailed feedback, suggestions, and recommendations to optimize the resume.
+You are an expert Executive Recruiter and ATS Specialist.
+Analyze the Resume and Job Description (JD) below. Provide concise JSON analysis.
 
 RESUME TEXT:
 """
-${resumeText}
+${resumeText.slice(0, 4000)}
 """
 
 JOB DESCRIPTION TEXT:
 """
-${jdText}
+${jdText.slice(0, 4000)}
 """
 
-Provide your analysis in the following strict JSON format:
+Provide your output in strict JSON:
 {
-  "summary": "A 2-3 sentence overview of how well the resume matches the JD.",
-  "strengths": ["Strength 1 (e.g. strong backend foundations)", "Strength 2"],
-  "weaknesses": ["Weakness 1 (e.g. lack of cloud deployments mentioned)", "Weakness 2"],
-  "recommendations": ["Actionable optimization step 1", "Actionable optimization step 2"],
-  "suggestedBulletPoints": ["Example of a rewritten accomplishment bullet matching the JD style", "Example 2"],
-  "missingKeywords": ["Crucial skill or tool mentioned in JD but absent from Resume", "Keyword 2"],
-  "grammarNotes": "A brief observation about the spelling, grammar, tone, or style of the resume."
+  "summary": "2 sentence overview of match quality.",
+  "strengths": ["Key strength 1", "Key strength 2"],
+  "weaknesses": ["Key weakness 1", "Key weakness 2"],
+  "recommendations": ["Action step 1", "Action step 2"],
+  "suggestedBulletPoints": ["Rewritten accomplishment bullet 1", "Rewritten bullet 2"],
+  "missingKeywords": ["Missing skill 1", "Missing skill 2"],
+  "grammarNotes": "Observation on resume tone/grammar."
 }
 `;
 
@@ -78,6 +78,8 @@ Provide your analysis in the following strict JSON format:
       contents: prompt,
       config: {
         responseMimeType: "application/json",
+        maxOutputTokens: 1200,
+        temperature: 0.2,
       }
     });
 
@@ -94,12 +96,12 @@ Provide your analysis in the following strict JSON format:
       !Array.isArray(analysis.missingKeywords) ||
       typeof analysis.grammarNotes !== "string"
     ) {
-      throw new Error("Gemini returned an invalid analysis response");
+      throw new Error("Gemini returned invalid analysis JSON structure");
     }
 
     return analysis;
   } catch (error) {
-    console.error("Gemini analysis failed, falling back to rule-based system:", error);
+    console.error("Gemini analysis failed, using fast rule-based engine:", error);
     return getFallbackAnalysis(resumeText, jdText);
   }
 }
@@ -111,7 +113,6 @@ function getFallbackAnalysis(resumeText: string, jdText: string): GeminiAnalysis
   const resumeLower = resumeText.toLowerCase();
   const jdLower = jdText.toLowerCase();
 
-  // Basic keyword matcher
   const keywords = ["docker", "kubernetes", "aws", "gcp", "azure", "ci/cd", "machine learning", "fastapi", "react", "typescript", "microservices", "unit testing"];
   const missingKeywords: string[] = [];
   const strengths: string[] = [];
@@ -134,12 +135,7 @@ function getFallbackAnalysis(resumeText: string, jdText: string): GeminiAnalysis
 
   const weaknesses: string[] = [];
   if (missingKeywords.length > 0) {
-    weaknesses.push(`Missing important target technologies such as: ${missingKeywords.slice(0, 3).join(", ")}.`);
-  }
-  if (!resumeLower.includes("achieved") && !resumeLower.includes("improved") && !resumeLower.includes("led")) {
-    weaknesses.push("Accomplishment statements lack quantitative impact (e.g., %, $ figures).");
-  } else {
-    strengths.push("Accomplishments show action-oriented language.");
+    weaknesses.push(`Missing target technologies: ${missingKeywords.slice(0, 3).join(", ")}.`);
   }
 
   const recommendations: string[] = [
@@ -148,26 +144,22 @@ function getFallbackAnalysis(resumeText: string, jdText: string): GeminiAnalysis
     "Ensure your professional summary highlights your primary expertise within the first 15 words."
   ];
 
-  if (missingKeywords.length > 0) {
-    recommendations.push(`Incorporate keywords like ${missingKeywords.slice(0, 2).join(", ")} directly into your experience section description.`);
-  }
-
   return {
-    summary: "The resume covers basic software engineering tenets but lacks specific alignment with the modern cloud/platform tools defined in the target job description. Custom tailoring is recommended.",
+    summary: "The resume covers core software engineering tenets but requires tighter keyword alignment with modern cloud/platform tools in the target job description.",
     strengths,
-    weaknesses: weaknesses.length > 0 ? weaknesses : ["Accomplishment quantitative impact could be deepened."],
+    weaknesses: weaknesses.length > 0 ? weaknesses : ["Accomplishment quantitative metrics can be deepened."],
     recommendations,
     suggestedBulletPoints: [
       `Collaborated on scaling full stack services using modern framework stacks, resulting in improved latency across core modules.`,
       `Engineered secure REST APIs and orchestrated data layers to support business workflow requirements.`
     ],
     missingKeywords: missingKeywords.length > 0 ? missingKeywords : ["CLOUD ARCHITECTURE", "MICROSERVICES"],
-    grammarNotes: "Tone is appropriately professional. Ensure consistency in verb tenses across current and past experiences."
+    grammarNotes: "Tone is appropriately professional. Ensure consistent past tense verbs for completed positions."
   };
 }
 
 /**
- * Uses Gemini AI for real-time generative conversational response grounded on candidate resume data.
+ * Uses Gemini AI for ultra-fast, low-latency conversational responses grounded on candidate resume data.
  */
 export async function getGeminiChatResponse(
   userQuery: string,
@@ -186,32 +178,30 @@ export async function getGeminiChatResponse(
   try {
     const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
     const prompt = `
-You are an expert AI Career Coach, ATS Specialist, and Technical Interviewer (Resume Co-Pilot).
-You are grounded in the candidate's uploaded resume.
+You are an expert AI Career Coach & Resume Co-Pilot.
+Answer concisely based on the candidate's uploaded resume context.
 
 CANDIDATE CONTEXT:
-- Candidate Name: ${context.candidateName || "Candidate"}
+- Name: ${context.candidateName || "Candidate"}
 - Target Position: ${context.jobTitle || "Software Engineer"}
-- ATS Benchmark Score: ${context.atsScore || 85}/100
-- Identified Skills (${(context.skillsFound || []).length}): ${(context.skillsFound || []).join(", ") || "TypeScript, React, Python, SQL"}
-- High-Priority Missing Skills: ${(context.missingSkills || []).join(", ") || "Docker, AWS, Kubernetes"}
-- Resume Context Snippet:
-"""
-${(context.resumeText || "").slice(0, 1500)}
-"""
+- ATS Score: ${context.atsScore || 85}/100
+- Skills Found: ${(context.skillsFound || []).slice(0, 10).join(", ") || "TypeScript, React, Python, SQL"}
+- Missing Skills: ${(context.missingSkills || []).slice(0, 5).join(", ") || "Docker, AWS"}
 
-USER QUESTION:
-"${userQuery}"
+USER QUESTION: "${userQuery}"
 
-RESPONSE INSTRUCTIONS:
-- Provide an encouraging, expert, clear, and actionable response.
-- Use markdown formatting (**bold**, \`code\`, ### headings, • bullet points).
-- Offer practical advice to optimize ATS ranking or excel in technical interviews.
+INSTRUCTIONS:
+- Give a fast, helpful, clear response in under 180 words.
+- Use bullet points & bold keywords where appropriate.
 `;
 
     const response = await client.models.generateContent({
       model,
       contents: prompt,
+      config: {
+        maxOutputTokens: 500, // Reduced token length for sub-second responses
+        temperature: 0.2,
+      }
     });
 
     return response.text || null;
@@ -220,4 +210,3 @@ RESPONSE INSTRUCTIONS:
     return null;
   }
 }
-
