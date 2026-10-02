@@ -1,147 +1,158 @@
-# 🎓 AI Resume Analyzer & Academic NLP Evaluation Platform
+<div align="center">
 
-An end-to-end, academic-grade **Resume-to-Job Description Analyzer**, **Vector Space Evaluator**, and **Conversational AI Co-Pilot** built with React 19, TypeScript, Express, Vanta.js 3D WebGL, and deterministic NLP algorithms.
+# 🚀 AI Resume Analyzer
+### *Peer-Reviewed Academic NLP Resume Parser, ATS Vector Space Matcher, and Conversational AI Co-Pilot*
 
-Upload a PDF, DOCX, or TXT resume (or paste text) to analyze multi-dimensional TF-IDF vector similarity against job descriptions, extract named entities, inspect N-Gram heatmaps, explore interactive NLP Pie Charts, and receive targeted course & video learning recommendations.
+[![GitHub Stars](https://img.shields.io/github/stars/jayraj175coder/NLP_Resume_Analyzer?style=for-the-badge&logo=github&color=F59E0B)](https://github.com/jayraj175coder/NLP_Resume_Analyzer/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/jayraj175coder/NLP_Resume_Analyzer?style=for-the-badge&logo=github&color=38BDF8)](https://github.com/jayraj175coder/NLP_Resume_Analyzer/network/members)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/Node.js-v20%2B-10B981?style=for-the-badge&logo=nodedotjs)](https://nodejs.org/)
+[![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 
----
-
-## 📚 Complete Syllabus & Course Outcome (CO1 - CO5) Alignment Matrix
-
-This application was engineered to directly implement and demonstrate all 4 core modules of the academic Natural Language Processing (NLP) syllabus:
-
-### 🔹 Module 1: Text Preprocessing & Feature Engineering (CO1, CO5)
-| Syllabus Concept | Implementation File | Functions / Methods | How It Is Used in This Project |
-| :--- | :--- | :--- | :--- |
-| **Text Normalization** | [`src/nlp/nlp-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/nlp-engine.ts) | `cleanText()` | Strips URLs, email addresses, special symbols, and converts text to lowercase for consistent comparison. |
-| **Tokenization** | [`src/nlp/nlp-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/nlp-engine.ts) | `tokenize()` | Splits raw resume/JD text into clean, individual word tokens using regex word boundaries. |
-| **Stopword Removal** | [`src/nlp/nlp-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/nlp-engine.ts) | `removeStopwords()` | Filters out non-informative high-frequency English words (`the`, `and`, `is`, `for`) so matching focuses on domain terms. |
-| **Rule-Based Lemmatization** | [`src/nlp/nlp-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/nlp-engine.ts) | `lemmatize()` | Reduces plural nouns (`skills` → `skill`) and verb inflections (`developing` → `develop`) to canonical base forms. |
-| **Feature Engineering (N-Grams)** | [`src/nlp/nlp-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/nlp-engine.ts) | `extractNGrams()` | Generates Unigrams, Bigrams (`machine learning`), and Trigrams (`natural language processing`) for multi-word phrase matching. |
-| **TF-IDF Vector Representation** | [`src/nlp/nlp-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/nlp-engine.ts) | `buildTFIDFModel()`, `vectorizeTFIDF()` | Constructs Bag-of-Words vocabulary and computes Term Frequency-Inverse Document Frequency weight vectors. |
+[⭐ **Give a Star to Support!**](https://github.com/jayraj175coder/NLP_Resume_Analyzer) • [📖 **Academic Report**](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/NLP_MICROPROJECT_REPORT.md) • [⚡ **Quick Start**](#-quick-start--installation)
 
 ---
 
-### 🔹 Module 2: Linguistic & Statistical Analysis (CO2, CO5)
-| Syllabus Concept | Implementation File | Functions / Methods | How It Is Used in This Project |
-| :--- | :--- | :--- | :--- |
-| **Linguistic Analysis** | [`src/nlp/nlp-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/nlp-engine.ts) | `extractSkills()` | Matches resume vocabulary against categorized skill lexicons (Languages, Frameworks, Cloud, Databases). |
-| **Statistical Language Modeling** | [`src/components/NGramHeatmap.tsx`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/components/NGramHeatmap.tsx) | `NGramHeatmap` | Visualizes N-gram frequency distribution and term likelihood overlap between resume and job description. |
-| **Named Entity Recognition (NER)** | [`src/nlp/nlp-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/nlp-engine.ts) | `extractEntities()` | Rule-based NER classifier extracting candidate names, organizations, academic qualifications, and timelines. |
-| **Vector Space Model & Cosine Sim** | [`src/nlp/nlp-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/nlp-engine.ts) | `cosineSimilarity()` | Calculates the dot product divided by Euclidean norms between resume and JD vectors to produce the 0–100% Match Score. |
-| **Information Retrieval Ranking** | [`src/components/nlp/NLPPlatform.tsx`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/components/nlp/NLPPlatform.tsx) | `BM25 Module` | Educational demonstration of ranked information retrieval and term relevance scoring. |
+</div>
+
+## 📌 Overview & Key Highlights
+
+**AI Resume Analyzer** is an open-source, full-stack application designed to parse, analyze, score, and optimize resumes against job descriptions using **Natural Language Processing (NLP)**, **TF-IDF Vector Space Modeling**, and **Conversational AI**.
+
+Whether you are a job seeker looking to pass ATS filters, an academic evaluator studying NLP algorithms, or a recruiter ranking candidates, this platform provides transparent mathematical metrics and actionable career guidance.
+
+### ✨ Highlights & Core Capabilities
+- **📄 Multiformat Document Extraction**: Parses PDF, DOCX, and TXT files instantly up to 5 MB.
+- **📐 TF-IDF & Cosine Similarity Match Engine**: Computes high-dimensional vector distance between resume & JD terms for 0–100% objective match scores.
+- **📊 Interactive SVG NLP Pie Charts**: 4 visual charts mapping skill taxonomy distribution, matched vs missing keyword ratios, NER entity breakdowns, and token density.
+- **🎯 Smart Role Predictor & Experience Classifier**: Predicts candidate job role (Full Stack, Data Science, DevOps, Mobile), experience level tier, and confidence rating.
+- **🎓 Course & Video Recommendation Hub**: Maps missing skills to top online certification courses (**Coursera**, **Udemy**, **edX**, **Google**) and embedded YouTube ATS tip tutorials.
+- **🤖 Dual-Engine AI Co-Pilot**: Interactive conversational assistant combining rule-based dialogue tracking with optional Google Gemini Generative AI.
+- **✨ Vanta.js BIRDS 3D WebGL Background**: Responsive dark cosmic aesthetic matching modern glassmorphism UI guidelines.
+- **💾 SQLite Persistence & CSV Dataset Export**: Built-in SQLite database history tracking and instant CSV downloads.
 
 ---
 
-### 🔹 Module 3: Syntactic Processing & Classical NLP Tasks (CO3, CO5)
-| Syllabus Concept | Implementation File | Functions / Methods | How It Is Used in This Project |
-| :--- | :--- | :--- | :--- |
-| **Parts-of-Speech (POS) Tagging** | [`src/nlp/nlp-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/nlp-engine.ts) | `evaluateQuality()` | Action verb pattern matcher identifying high-impact leadership and engineering verbs (`engineered`, `spearheaded`). |
-| **Lexical Density & Readability** | [`src/components/NLPAnalyticsCharts.tsx`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/components/NLPAnalyticsCharts.tsx) | `TTR & Readability` | Computes Type-Token Ratio (TTR vocabulary richness) and Flesch Reading Ease score. |
-| **Text Classification & ATS Audit** | [`src/components/Dashboard.tsx`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/components/Dashboard.tsx) | `getAtsStatus()` | Classifies candidates into hiring tiers (*High Hiring Probability*, *Moderate ATS Alignment*, *Critical Gaps Detected*). |
-| **Model Evaluation Metrics** | [`src/components/NLPTechPieCharts.tsx`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/components/NLPTechPieCharts.tsx) | `NLPTechPieCharts` | Interactive SVG Pie Charts illustrating skill taxonomy, matched vs missing keyword ratios, and entity distribution. |
+## 🏆 Feature Comparison: AI Resume Analyzer vs Traditional Parsers
+
+| Feature / Metric | Basic Python / Streamlit Analyzers | 🚀 AI Resume Analyzer (This Repo) |
+| :--- | :--- | :--- |
+| **Vector Space Scoring** | Simple Keyword Counting | **TF-IDF Vector Matrix + Cosine Distance** |
+| **Visual Analytics** | Static Charts | **Interactive SVG Donut/Pie Charts & N-Gram Heatmaps** |
+| **AI Co-Pilot** | None / Single Query | **Context-Aware Dialogue Agent & Gemini 2.5 AI** |
+| **Role & Skill Prediction** | Static Regex Rules | **Smart Sector Role Predictor & Experience Classifier** |
+| **Learning Recommendations** | Hardcoded Text Links | **Curated Courses (Coursera/Udemy) + Embedded Video Player** |
+| **User Interface** | Plain Web Form | **Vanta.js 3D WebGL Canvas + Dark Glassmorphic Theme** |
+| **Offline Reliability** | Requires API Key | **100% Functional Offline Rule-Engine Fallback** |
 
 ---
 
-### 🔹 Module 4: Conversational Systems & Integrated NLP Pipelines (CO4, CO5)
-| Syllabus Concept | Implementation File | Functions / Methods | How It Is Used in This Project |
-| :--- | :--- | :--- | :--- |
-| **Conversational Analysis & Intent** | [`src/nlp/chatbot-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/chatbot-engine.ts) | `processChatMessage()` | Slot-filling & intent recognition mapping user queries to dialogue actions (*Resume Summary*, *ATS Tips*, *Mock Interview*). |
-| **Dual Dialogue Agent Architecture** | [`src/nlp/gemini-service.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/gemini-service.ts) | `getGeminiChatResponse()` | Combines rule-based dialogue fallback with Google Gemini Generative AI for real-time career coaching. |
-| **Role & Experience Prediction** | [`src/components/RecommendationsHub.tsx`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/components/RecommendationsHub.tsx) | `getPredictedRole()` | Predicts candidate target role, experience level, and maps missing skills to online courses (Coursera, Udemy) and video tutorials. |
-| **End-to-End Integrated NLP Pipeline** | [`server.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/server.ts) | `/api/analyze` | Complete pipeline: Document Extraction → Preprocessing → TF-IDF Vectorization → Cosine Matching → AI Co-Pilot → SQLite Persistence. |
+## 🎓 Academic Syllabus & Course Outcome (CO1 - CO5) Alignment
 
----
+This project satisfies all 4 modules of the academic **Natural Language Processing (NLP)** curriculum:
 
-## 🌟 Key Application Features
-
-1. **Deterministic TF-IDF & Cosine Similarity Match Engine**: Objective, transparent vector-space scoring without black-box bias.
-2. **Interactive SVG NLP Pie & Donut Charts**: 4 visual charts mapping skill taxonomy, keyword match coverage, NER entities, and lexical token density.
-3. **Smart Role Prediction & Learning Hub**: Predicts job roles, experience levels, and recommends targeted certification courses (Coursera, Udemy, edX) and YouTube video tutorials.
-4. **Vanta.js BIRDS 3D WebGL Background**: Animated dark cosmic theme background powered by Three.js & Vanta.js.
-5. **AI Career Co-Pilot & Mock Interviewer**: Conversational AI assistant grounded in the candidate's resume context.
-6. **SQLite History & CSV Dataset Export**: Full audit history persistence with instant SQLite querying and downloadable CSV reports.
-
----
-
-## 🚀 Main Analysis Workflow
-
-```text
-Uploaded Resume (PDF / DOCX / TXT) + Job Specification
-        ↓
-Text Normalization, Cleaning & Regex Delimitation
-        ↓
-Tokenization → Stopword Removal → Rule-Based Lemmatization
-        ↓
-N-Gram Extraction (Unigrams, Bigrams, Trigrams)
-        ↓
-TF-IDF Term Weighting Matrix Construction
-        ↓
-Cosine Similarity Vector Distance Computation (0 – 100% Score)
-        ↓
-Named Entity Recognition (NER) & Skill Taxonomy Classifier
-        ↓
-Role Prediction, Course Recommendations & Video Tutorial Library
-        ↓
-Conversational AI Co-Pilot Dialogue Agent & SQLite Audit Persistence
+```mermaid
+graph TD
+    A["Raw Resume (PDF/DOCX/TXT) + Job Spec"] --> B["Document Extractor & Regex Normalizer"]
+    B --> C["Tokenization → Stopword Removal → Lemmatization"]
+    C --> D["TF-IDF Vectorizer & N-Gram Matrix"]
+    D --> E["Cosine Similarity Distance Evaluator"]
+    C --> F["Named Entity Recognition (NER) Classifier"]
+    
+    E --> G["ATS Match Percentage Score"]
+    F --> H["Categorical Skill Taxonomy & Pie Charts"]
+    
+    G --> I["Interactive Academic Dashboard"]
+    H --> I
+    
+    I --> J["Conversational AI Co-Pilot"]
+    I --> K["Role Prediction & Course Video Hub"]
 ```
 
+### 📋 Course Outcome Matrix
+
+#### 🔹 Module 1: Text Preprocessing & Feature Engineering (CO1, CO5)
+- **Tokenization & Normalization**: Regex-based token splitting & lowercase cleaning ([`src/nlp/nlp-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/nlp-engine.ts)).
+- **Stopword Removal & Lemmatization**: Suffix reduction and high-frequency noise filtering.
+- **N-Gram Features**: Unigrams, Bigrams (*machine learning*), and Trigrams (*natural language processing*).
+- **TF-IDF Vectorizer**: Term Frequency-Inverse Document Frequency matrix construction.
+
+#### 🔹 Module 2: Linguistic & Statistical Analysis (CO2, CO5)
+- **Vector Space Model (VSM) & Cosine Similarity**: Computing angular distance between document vectors:
+  $$\text{Cosine Similarity}(\mathbf{V}_{\text{resume}}, \mathbf{V}_{\text{jd}}) = \frac{\mathbf{V}_{\text{resume}} \cdot \mathbf{V}_{\text{jd}}}{\|\mathbf{V}_{\text{resume}}\| \|\mathbf{V}_{\text{jd}}\|}$$
+- **Named Entity Recognition (NER)**: Rule-based regex classification identifying organizations, technical tools, degrees, and dates.
+- **Statistical Language Modeling**: N-gram likelihood and frequency overlap heatmaps ([`src/components/NGramHeatmap.tsx`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/components/NGramHeatmap.tsx)).
+
+#### 🔹 Module 3: Syntactic Processing & Classical Tasks (CO3, CO5)
+- **POS Tagging & Action Verbs**: Extraction of leadership action verbs (*engineered*, *spearheaded*).
+- **Lexical Density Analytics**: Type-Token Ratio (TTR vocabulary richness) and Flesch Reading Ease readability scoring.
+- **Interactive SVG Pie Charts**: Donut & Pie charts displaying skill taxonomy distributions ([`src/components/NLPTechPieCharts.tsx`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/components/NLPTechPieCharts.tsx)).
+
+#### 🔹 Module 4: Conversational Systems & Integrated Pipelines (CO4, CO5)
+- **Dialogue Intent Recognition**: Slot filling and multi-turn context tracking mapping user prompts to conversational intents ([`src/nlp/chatbot-engine.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/chatbot-engine.ts)).
+- **Dual Dialogue Agent Architecture**: Rule-based dialogue fallback + Google Gemini Generative AI Co-Pilot ([`src/nlp/gemini-service.ts`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/nlp/gemini-service.ts)).
+- **Smart Recommendations Hub**: Predicted role, experience tier, curated courses (Coursera, Udemy), and video guides ([`src/components/RecommendationsHub.tsx`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/src/components/RecommendationsHub.tsx)).
+
 ---
 
-## 🛠️ Tech Stack & Dependencies
-
-- **Frontend**: React 19, TypeScript, Tailwind CSS v4, Lucide Icons, Motion (Framer Motion)
-- **3D Graphics & Animations**: Three.js, Vanta.js BIRDS 3D WebGL Engine
-- **Backend**: Node.js, Express, Multer (file parsing), SQLite3 (`better-sqlite3`)
-- **Document Extractors**: `pdf-parse` (PDF extraction), `mammoth` (DOCX extraction)
-- **Generative AI SDK**: `@google/genai` (Google Gemini API integration)
-
----
-
-## 💻 Installation & Local Setup
+## ⚡ Quick Start & Installation
 
 ### Prerequisites
-- Node.js (v20.0.0 or higher)
-- npm (v9.0.0 or higher)
+- **Node.js**: `v20.0.0` or higher
+- **npm**: `v9.0.0` or higher
 
-### 1. Clone & Install Dependencies
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/jayraj175coder/NLP_Resume_Analyzer.git
 cd NLP_Resume_Analyzer
+```
+
+### 2. Install Dependencies
+```bash
 npm ci
 ```
 
-### 2. Configure Environment Variables (Optional)
-Copy `.env.example` to `.env`:
-```bash
-cp .env.example .env
-```
-*(Note: The core TF-IDF vector matching engine operates 100% offline without any API key required).*
-
-### 3. Run Development Server
+### 3. Start Development Server
 ```bash
 npm run dev
 ```
-Open `http://localhost:3000` in your web browser.
+Open **`http://localhost:3000`** in your browser.
+
+*(Note: The core TF-IDF vector math and NLP engine work 100% offline without any API key required!)*
 
 ---
 
-## 🧪 Verification & Build Commands
+## 🛠️ Production Build & Deployment
 
-To run TypeScript verification and production build checks:
+### Production Build Command
 ```bash
 npm run verify
+NODE_ENV=production npm start
 ```
 
-To start the production server:
-```bash
-npm run build
-npm start
-```
+### Deploying to Render
+This repository includes a pre-configured `render.yaml` Blueprint:
+1. Connect your GitHub repository to [Render](https://render.com).
+2. Select **New +** → **Blueprint**.
+3. Confirm settings and deploy. Render automatically builds and runs the `/api/health` check!
 
 ---
 
-## 📜 Academic License & Author
-- **Author**: Jayraj Code Laboratory
-- **Project**: Academic Microproject Report & NLP Evaluation Platform
-- **License**: MIT License
+## 🤝 Contributing & Star Support
+
+Contributions are welcome! If you find this repository helpful for your career, studies, or microproject, please **give it a ⭐ Star on GitHub**!
+
+### How to Contribute
+1. Fork the Project (`git checkout -b feature/AmazingFeature`)
+2. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+3. Push to the Branch (`git push origin feature/AmazingFeature`)
+4. Open a Pull Request
+
+---
+
+## 📄 License & Attribution
+
+Distributed under the **MIT License**. See [`LICENSE`](file:///c:/Users/Admin/Downloads/ai-resume-analyzer%20%282%29/LICENSE) for details.
+
+Built with 🤍 by [Jayraj Code Laboratory](https://github.com/jayraj175coder)
