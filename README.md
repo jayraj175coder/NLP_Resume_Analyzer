@@ -6,7 +6,8 @@
 [![GitHub Stars](https://img.shields.io/github/stars/jayraj175coder/NLP_Resume_Analyzer?style=for-the-badge&logo=github&color=F59E0B)](https://github.com/jayraj175coder/NLP_Resume_Analyzer/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/jayraj175coder/NLP_Resume_Analyzer?style=for-the-badge&logo=github&color=38BDF8)](https://github.com/jayraj175coder/NLP_Resume_Analyzer/network/members)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Node.js Version](https://img.shields.io/badge/Node.js-v20%2B-10B981?style=for-the-badge&logo=nodedotjs)](https://nodejs.org/)
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110.0-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 

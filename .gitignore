@@ -12,3 +12,6 @@ resume_analyzer_db.json
 *.log
 .env*
 !.env.example
+__pycache__/
+*.pyc
+

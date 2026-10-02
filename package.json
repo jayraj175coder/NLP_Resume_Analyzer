@@ -18,6 +18,8 @@
   ],
   "scripts": {
     "dev": "tsx server.ts",
+    "py-dev": "python main.py",
+    "py-backend": "python python-backend/app.py",
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
     "start": "node dist/server.cjs",
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",

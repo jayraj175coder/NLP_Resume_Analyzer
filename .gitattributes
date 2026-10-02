@@ -1,0 +1,22 @@
+# GitHub Linguist Language Override
+# Force GitHub Repository Primary Language display to Python
+
+# Treat React/TypeScript frontend, node_modules, and web assets as vendored/documentation
+src/** linguist-vendored
+src/**/* linguist-vendored
+dist/** linguist-vendored
+server.ts linguist-vendored
+vite.config.ts linguist-vendored
+tsconfig.json linguist-documentation
+package.json linguist-documentation
+package-lock.json linguist-vendored
+index.html linguist-documentation
+render.yaml linguist-documentation
+*.tsx linguist-vendored
+*.ts linguist-vendored
+*.css linguist-vendored
+*.json linguist-documentation
+
+# Mark Python files as primary code for GitHub statistics
+*.py linguist-detectable=true linguist-language=Python
+python-backend/*.py linguist-detectable=true linguist-language=Python
