@@ -26,20 +26,22 @@ import {
   Target,
   ExternalLink,
   Flame,
-  GraduationCap
+  GraduationCap,
+  Video
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { AnalysisResponse } from "../types";
 import NGramHeatmap from "./NGramHeatmap";
 import AcademicCertificateModal from "./AcademicCertificateModal";
 import NLPAnalyticsCharts from "./NLPAnalyticsCharts";
+import RecommendationsHub from "./RecommendationsHub";
 
 interface DashboardProps {
   data: AnalysisResponse;
 }
 
 export default function Dashboard({ data }: DashboardProps) {
-  const [activeView, setActiveView] = useState<"bento" | "skills" | "rewrites" | "audit">("bento");
+  const [activeView, setActiveView] = useState<"bento" | "skills" | "rewrites" | "audit" | "recommendations">("bento");
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [copiedKeyword, setCopiedKeyword] = useState<string | null>(null);
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>("all");
@@ -254,6 +256,18 @@ export default function Dashboard({ data }: DashboardProps) {
             <ShieldCheck className="w-3.5 h-3.5" />
             <span>ATS DIAGNOSTICS</span>
           </button>
+
+          <button
+            onClick={() => setActiveView("recommendations")}
+            className={`text-xs font-mono font-bold px-4 py-2 rounded-xl transition-all flex items-center space-x-2 shrink-0 cursor-pointer ${
+              activeView === "recommendations"
+                ? "bg-amber-500 text-slate-950 shadow-md"
+                : "bg-slate-900 text-slate-300 hover:text-white border border-amber-500/20 hover:border-amber-400/40"
+            }`}
+          >
+            <Video className="w-3.5 h-3.5 text-amber-300" />
+            <span>CAREER & COURSES</span>
+          </button>
         </div>
       </div>
 
@@ -360,12 +374,22 @@ export default function Dashboard({ data }: DashboardProps) {
           {/* Interactive NLP Analytics & Visual Charts */}
           <NLPAnalyticsCharts data={data} />
 
+          {/* Smart Career Predictions, Skill Courses & Video Learning Hub */}
+          <RecommendationsHub data={data} />
+
           {/* Interactive N-Gram Heatmap Matrix Component */}
           <NGramHeatmap
             resumeText={data.resumeText}
             skillsFound={skillsFound}
             missingSkills={missingSkills}
           />
+        </div>
+      )}
+
+      {/* CAREER PREDICTIONS, COURSES & VIDEO LEARNING VIEW */}
+      {activeView === "recommendations" && (
+        <div className="space-y-6">
+          <RecommendationsHub data={data} />
         </div>
       )}
 
