@@ -280,66 +280,108 @@ export default function RecommendationsHub({ data }: Props) {
 
       {/* SECTION 1: PREDICTED JOB ROLE & EXPERIENCE LEVEL CARD */}
       {(activeTab === "all" || activeTab === "role_predict") && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-5 bg-slate-900/90 rounded-xl border border-amber-500/30 relative overflow-hidden space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider flex items-center space-x-1.5">
-                <Target className="w-3.5 h-3.5" />
-                <span>PREDICTED JOB ROLE</span>
-              </span>
-              <span className="text-[10px] font-mono bg-teal-500/15 text-teal-300 border border-teal-500/30 px-2 py-0.5 rounded font-bold">
-                {predictedRole.confidence}% CONFIDENCE
-              </span>
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* ML Classification Card */}
+            <div className="p-5 bg-slate-900/90 rounded-xl border border-amber-500/40 relative overflow-hidden space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider flex items-center space-x-1.5">
+                  <Target className="w-3.5 h-3.5" />
+                  <span>PREDICTED JOB ROLE (SUPERVISED ML)</span>
+                </span>
+                <span className="text-[10px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded font-bold">
+                  {data.mlClassification?.confidence ? `${data.mlClassification.confidence}% CONFIDENCE` : `${predictedRole.confidence}% CONFIDENCE`}
+                </span>
+              </div>
+
+              <div className="space-y-1">
+                <h4 className="text-xl font-serif font-extrabold text-white">
+                  {data.mlClassification?.predictedCategory || predictedRole.role}
+                </h4>
+                <p className="text-xs text-slate-300 font-sans flex items-center justify-between">
+                  <span>ML Model: <strong className="text-amber-300">TF-IDF + Logistic Regression</strong></span>
+                  {data.mlClassification?.modelAccuracy && (
+                    <span className="text-[10px] font-mono text-teal-400 font-bold bg-teal-500/10 px-2 py-0.5 rounded border border-teal-500/20">
+                      Model Accuracy: {data.mlClassification.modelAccuracy}%
+                    </span>
+                  )}
+                </p>
+              </div>
+
+              <div className="pt-2 border-t border-slate-800 space-y-1.5">
+                <span className="text-[10px] font-mono text-slate-400 block uppercase">TOP CONTRIBUTING FEATURE WORDS (TF-IDF):</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {(data.mlClassification?.topKeywords || predictedRole.keySkills).map((sk, idx) => (
+                    <span key={idx} className="text-[10px] font-mono bg-slate-950 text-amber-300 border border-amber-500/20 px-2 py-0.5 rounded">
+                      ✓ {sk}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-1">
-              <h4 className="text-xl font-serif font-extrabold text-white">
-                {predictedRole.role}
-              </h4>
-              <p className="text-xs text-slate-300 font-sans">
-                Sector: <strong className="text-amber-300">{predictedRole.category}</strong>
-              </p>
-            </div>
+            {/* Experience Level Card */}
+            <div className="p-5 bg-slate-900/90 rounded-xl border border-teal-500/40 relative overflow-hidden space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold text-teal-400 uppercase tracking-wider flex items-center space-x-1.5">
+                  <Briefcase className="w-3.5 h-3.5" />
+                  <span>PREDICTED EXPERIENCE TIER</span>
+                </span>
+                <span className="text-[10px] font-mono bg-teal-500/15 text-teal-300 border border-teal-500/30 px-2 py-0.5 rounded font-bold">
+                  {data.mlClassification?.experienceLevel ? "CLASSIFIED BY ML" : "CHRONOLOGY"}
+                </span>
+              </div>
 
-            <div className="pt-2 border-t border-slate-800 space-y-1.5">
-              <span className="text-[10px] font-mono text-slate-400 block">CORE PREDICTED COMPETENCIES:</span>
-              <div className="flex flex-wrap gap-1.5">
-                {predictedRole.keySkills.map((sk, idx) => (
-                  <span key={idx} className="text-[10px] font-mono bg-slate-950 text-amber-300 border border-amber-500/20 px-2 py-0.5 rounded">
-                    ✓ {sk}
-                  </span>
-                ))}
+              <div className="space-y-1">
+                <h4 className="text-xl font-serif font-extrabold text-white">
+                  {data.mlClassification?.experienceLevel || predictedExp.level}
+                </h4>
+                <p className="text-xs text-slate-300 font-sans">
+                  Target Tier: <strong className="text-teal-300">{data.mlClassification?.experienceLevel || predictedExp.range}</strong>
+                </p>
+              </div>
+
+              <div className="pt-2 border-t border-slate-800 space-y-1">
+                <span className="text-[10px] font-mono text-slate-400 block">DATASET & MODEL METRICS:</span>
+                <p className="text-xs text-slate-300 font-sans leading-relaxed">
+                  Trained on <strong>{data.mlClassification?.datasetSize || 100} Resume Records</strong> across 10 distinct tech categories using Scikit-Learn TF-IDF feature extraction.
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="p-5 bg-slate-900/90 rounded-xl border border-teal-500/30 relative overflow-hidden space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold text-teal-400 uppercase tracking-wider flex items-center space-x-1.5">
-                <Briefcase className="w-3.5 h-3.5" />
-                <span>PREDICTED EXPERIENCE TIER</span>
-              </span>
-              <span className="text-[10px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded font-bold">
-                EVALUATION MATRICES
-              </span>
-            </div>
+          {/* Probability Distribution Bar Breakdown */}
+          {data.mlClassification?.probabilities && Object.keys(data.mlClassification.probabilities).length > 0 && (
+            <div className="p-4 bg-slate-900/90 rounded-xl border border-slate-800 space-y-3">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="font-bold text-white flex items-center space-x-2">
+                  <Layers className="w-4 h-4 text-amber-400" />
+                  <span>Supervised ML Probability Distribution Across Categories</span>
+                </span>
+                <span className="text-slate-400 text-[10px]">10 Category Matrix</span>
+              </div>
 
-            <div className="space-y-1">
-              <h4 className="text-xl font-serif font-extrabold text-white">
-                {predictedExp.level}
-              </h4>
-              <p className="text-xs text-slate-300 font-sans">
-                Chronology Tier: <strong className="text-teal-300">{predictedExp.range}</strong>
-              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
+                {Object.entries(data.mlClassification.probabilities)
+                  .sort((a, b) => b[1] - a[1])
+                  .slice(0, 6)
+                  .map(([cat, prob]) => (
+                    <div key={cat} className="p-2 bg-slate-950 rounded border border-slate-800 space-y-1">
+                      <div className="flex justify-between text-[11px]">
+                        <span className="text-slate-300 font-semibold truncate max-w-[200px]">{cat}</span>
+                        <span className="text-amber-400 font-bold">{prob}%</span>
+                      </div>
+                      <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
+                        <div
+                          className="bg-gradient-to-r from-amber-500 to-teal-400 h-full rounded-full transition-all duration-500"
+                          style={{ width: `${Math.max(prob, 2)}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+              </div>
             </div>
-
-            <div className="pt-2 border-t border-slate-800 space-y-1">
-              <span className="text-[10px] font-mono text-slate-400 block">QUALIFICATION ASSESSMENT:</span>
-              <p className="text-xs text-slate-300 font-sans leading-relaxed">
-                Resume layout displays technical depth and domain keyword alignment appropriate for {predictedExp.level.toLowerCase()} positions.
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       )}
 

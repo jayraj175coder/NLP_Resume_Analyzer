@@ -1,0 +1,23 @@
+{
+  "trained_at": "2026-10-03T19:22:11.011268",
+  "dataset_path": "C:\\Users\\Admin\\Downloads\\ai-resume-analyzer (2)\\dataset/resume_dataset_100.csv",
+  "dataset_records_count": 100,
+  "categories_count": 10,
+  "categories": [
+    "Cyber Security & Ethical Hacking",
+    "Data Engineering & Databases",
+    "Data Science & Machine Learning",
+    "DevOps & Cloud Architecture",
+    "Full Stack & Web Development",
+    "Mobile App Development",
+    "Network & Systems Administration",
+    "Product Management & Agile Leadership",
+    "Software Quality Assurance & Testing",
+    "UI/UX Design & Frontend Engineering"
+  ],
+  "accuracy": 0.9,
+  "precision": 0.9333333333333332,
+  "recall": 0.9,
+  "f1_score": 0.8933333333333333,
+  "experience_accuracy": 0.6875
+}

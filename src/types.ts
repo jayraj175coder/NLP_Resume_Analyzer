@@ -35,6 +35,17 @@ export interface QualityReport {
   duplicates?: { word: string; count: number }[];
 }
 
+export interface MLClassificationResult {
+  predictedCategory: string;
+  confidence: number;
+  isMlTrained: boolean;
+  probabilities?: { [category: string]: number };
+  topKeywords?: string[];
+  experienceLevel?: string;
+  modelAccuracy?: number;
+  datasetSize?: number;
+}
+
 export interface AnalysisResponse {
   success: boolean;
   reportId: string;
@@ -54,4 +65,5 @@ export interface AnalysisResponse {
   duplicates: { word: string; count: number }[];
   qualityReport: QualityReport;
   analysis: GeminiAnalysisResult;
+  mlClassification?: MLClassificationResult;
 }

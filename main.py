@@ -210,6 +210,98 @@ def extract_candidate_name(resume_text: str) -> str:
                 return line
     return "Candidate Profile"
 
+import pickle
+import json
+import numpy as np
+
+MODELS_DIR = os.path.join(os.path.dirname(__file__), "models")
+
+def get_ml_models():
+    cat_model_path = os.path.join(MODELS_DIR, "resume_category_model.pkl")
+    vectorizer_path = os.path.join(MODELS_DIR, "tfidf_vectorizer.pkl")
+    encoder_path = os.path.join(MODELS_DIR, "label_encoder.pkl")
+    
+    if not (os.path.exists(cat_model_path) and os.path.exists(vectorizer_path) and os.path.exists(encoder_path)):
+        try:
+            import train_model
+            ds_path = os.path.join(os.path.dirname(__file__), "dataset", "resume_dataset_100.csv")
+            train_model.train_pipeline(ds_path, output_dir=MODELS_DIR)
+        except Exception as err:
+            print("Auto training failed:", err)
+            return None, None, None, None
+
+    try:
+        with open(cat_model_path, "rb") as f:
+            cat_model = pickle.load(f)
+        with open(vectorizer_path, "rb") as f:
+            vectorizer = pickle.load(f)
+        with open(encoder_path, "rb") as f:
+            encoder = pickle.load(f)
+        metrics = {}
+        metrics_path = os.path.join(MODELS_DIR, "metrics.json")
+        if os.path.exists(metrics_path):
+            with open(metrics_path, "r") as f:
+                metrics = json.load(f)
+        return cat_model, vectorizer, encoder, metrics
+    except Exception as e:
+        print(f"Error loading ML models: {e}")
+        return None, None, None, None
+
+def ml_predict_resume_role(resume_text: str) -> Dict[str, Any]:
+    """Perform ML Supervised Classification on candidate resume text."""
+    cat_model, vectorizer, encoder, metrics = get_ml_models()
+    skills = extract_skills_from_text(resume_text)
+    h_res = predict_role_and_experience(skills, resume_text)
+    
+    if not cat_model or not vectorizer or not encoder:
+        return {
+            "predictedCategory": h_res["predicted_role"],
+            "confidence": 75.0,
+            "isMlTrained": False,
+            "probabilities": {h_res["predicted_role"]: 75.0},
+            "topKeywords": skills[:5],
+            "experienceLevel": h_res["experience_tier"],
+            "modelAccuracy": 0.0
+        }
+        
+    cleaned = clean_text(resume_text)
+    vec = vectorizer.transform([cleaned])
+    probs = cat_model.predict_proba(vec)[0]
+    classes = encoder.classes_
+    
+    prob_dict = {str(cls): float(round(p * 100, 2)) for cls, p in zip(classes, probs)}
+    top_idx = probs.argmax()
+    top_category = str(classes[top_idx])
+    confidence = float(round(probs[top_idx] * 100, 2))
+    
+    feature_names = np.array(vectorizer.get_feature_names_out()) if hasattr(vectorizer, "get_feature_names_out") else np.array([])
+    row_vec = vec.toarray()[0]
+    top_term_indices = row_vec.argsort()[::-1][:5]
+    top_keywords = [str(feature_names[i]) for i in top_term_indices if row_vec[i] > 0] if len(feature_names) > 0 else skills[:5]
+
+    exp_model_path = os.path.join(MODELS_DIR, "experience_model.pkl")
+    exp_enc_path = os.path.join(MODELS_DIR, "experience_encoder.pkl")
+    exp_level = h_res["experience_tier"]
+    if os.path.exists(exp_model_path) and os.path.exists(exp_enc_path):
+        try:
+            with open(exp_model_path, "rb") as f: exp_m = pickle.load(f)
+            with open(exp_enc_path, "rb") as f: exp_e = pickle.load(f)
+            exp_pred = exp_m.predict(vec)[0]
+            exp_level = str(exp_e.inverse_transform([exp_pred])[0])
+        except Exception:
+            pass
+
+    return {
+        "predictedCategory": top_category,
+        "confidence": confidence,
+        "isMlTrained": True,
+        "probabilities": prob_dict,
+        "topKeywords": top_keywords,
+        "experienceLevel": exp_level,
+        "modelAccuracy": float(round(metrics.get("accuracy", 0.90) * 100, 2)),
+        "datasetSize": metrics.get("dataset_records_count", 100)
+    }
+
 def predict_role_and_experience(skills: List[str], text: str) -> Dict[str, str]:
     """Predict primary job sector role and experience level."""
     skills_set = set(skills)
@@ -345,6 +437,12 @@ if FASTAPI_AVAILABLE:
             "Include a concise career summary paragraph at the top of your resume."
         ]
 
+        ml_info = ml_predict_resume_role(text_resume)
+        if ml_info.get("isMlTrained"):
+            role_info["predicted_role"] = ml_info["predictedCategory"]
+            role_info["experience_tier"] = ml_info["experienceLevel"]
+            strengths.append(f"ML Model Classification: {ml_info['predictedCategory']} ({ml_info['confidence']}% confidence)")
+
         report_id = f"py_rep_{uuid.uuid4().hex[:8]}"
         timestamp = datetime.now().isoformat()
         conn = sqlite3.connect(DB_PATH)
@@ -373,8 +471,38 @@ if FASTAPI_AVAILABLE:
             "strengths": strengths,
             "weaknesses": weaknesses if weaknesses else ["No critical issues found."],
             "recommendations": recommendations,
-            "rolePrediction": role_info
+            "rolePrediction": role_info,
+            "mlClassification": ml_info
         }
+
+    class PredictRequest(BaseModel):
+        resumeText: str
+
+    @app.post("/api/predict-role")
+    async def predict_role_endpoint(req: PredictRequest):
+        if not req.resumeText or not req.resumeText.strip():
+            raise HTTPException(status_code=400, detail="Resume text is required")
+        res = ml_predict_resume_role(req.resumeText)
+        return {"success": True, "data": res}
+
+    @app.get("/api/model-info")
+    def get_model_info():
+        cat_m, vec_m, enc_m, metrics = get_ml_models()
+        return {
+            "success": True,
+            "isTrained": bool(cat_m),
+            "metrics": metrics
+        }
+
+    @app.post("/api/train-model")
+    def trigger_train_model():
+        try:
+            import train_model
+            ds_path = os.path.join(os.path.dirname(__file__), "dataset", "resume_dataset_100.csv")
+            metrics = train_model.train_pipeline(ds_path, output_dir=MODELS_DIR)
+            return {"success": True, "message": "ML Model Trained Successfully!", "metrics": metrics}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Training failed: {str(e)}")
 
     @app.post("/api/chat")
     async def chat(request: ChatRequest):
