@@ -3,12 +3,14 @@ services:
     runtime: node
     name: nlp-resume-analyzer
     plan: free
-    buildCommand: npm ci && npm run build
+    buildCommand: npm ci --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false"
       - key: GEMINI_API_KEY
         sync: false
